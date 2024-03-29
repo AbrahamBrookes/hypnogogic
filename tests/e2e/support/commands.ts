@@ -46,3 +46,12 @@ Cypress.Commands.add('ionButtonClick', (selector: string) => {
 	  .find('a, button')
 	  .click({force: true});
 });
+
+/**
+ * A helper to get local storage items from the window and assert on their values
+ */
+Cypress.Commands.add('assertLocalStorageItem', (key: string, value: string) => {
+	cy.window().then((window) => {
+		expect(window.localStorage.getItem(key)).to.eq(value);
+	});
+});
