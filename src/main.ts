@@ -51,3 +51,7 @@ const app = createApp(App)
 router.isReady().then(() => {
   app.mount('#app');
 });
+
+// load our pinia stores from storage
+import { useTimerStore } from '@stores/timerStore';
+const timerStore = useTimerStore();
