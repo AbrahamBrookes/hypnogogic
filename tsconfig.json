@@ -13,7 +13,10 @@
     "skipLibCheck": true,
     "noEmit": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+	  "@components/*": ["./src/components/*"],
+	  "@pages/*": ["./src/pages/*"],
+	  "@media/*": ["./src/media/*"],
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
