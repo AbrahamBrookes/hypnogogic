@@ -1,0 +1,7 @@
+{
+  "name": "hypnogogic",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
