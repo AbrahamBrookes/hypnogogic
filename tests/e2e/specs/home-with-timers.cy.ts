@@ -21,12 +21,6 @@ describe('Home screen with no timers', () => {
 		});
 	});
 
-	after(() => {
-		cy.window().then((window) => {
-			window.timerStore.clearStore();
-		});
-	});
-
 	specify('The user should see the timer on the home screen', () => {
 		cy.visit('/home');
 
