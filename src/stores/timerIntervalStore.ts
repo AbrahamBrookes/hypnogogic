@@ -1,0 +1,80 @@
+import { defineStore } from 'pinia';
+import { Storage } from '@ionic/storage';
+import { v4 as uuidv4 } from 'uuid';
+
+// TimerInterval is the subsequent alerts that are played after the initial timerInterval
+export interface TimerIntervalInterface {
+	id: string;
+	timer_id: string;
+	duration: number;
+	sound: string;
+}
+
+export const useTimerIntervalStore = defineStore('timerIntervalStore', {
+	state: () => ({
+		loading: false,
+		saving: false,
+		timerIntervals: [] as TimerIntervalInterface[],
+	}),
+	actions: {
+		addTimer(timerInterval: TimerIntervalInterface) {
+			console.log('Adding timer interval', timerInterval);
+			
+			this.timerIntervals.push({
+				...timerInterval,
+				id: uuidv4(),
+			});
+
+			this.persistStore();
+		},
+		updateTimer(timerInterval: TimerIntervalInterface) {
+			const index = this.timerIntervals.findIndex(t => t.id === timerInterval.id);
+			if (index >= 0) {
+				this.timerIntervals[index] = {...timerInterval}; // spreading the timerInterval object to avoid reference issues
+			}
+
+			this.persistStore();
+		},
+		removeTimer(remove: TimerIntervalInterface) {
+			this.timerIntervals = this.timerIntervals.filter(timerInterval => {
+				return timerInterval !== remove;
+			});
+
+			this.persistStore();
+		},
+		find(id: string): TimerIntervalInterface | undefined {
+			return this.timerIntervals.find(t => t.id === id);
+		},
+		persistStore() {
+			this.saving = true;
+			const store = new Storage();
+			store.create()
+				.then(() => {
+					store.set('timerIntervalstore', JSON.stringify(this.timerIntervals));
+				})
+				.finally(() => {
+					this.saving = false;
+				})
+		},
+		restoreStore() {
+			this.loading = true;
+			const store = new Storage();
+			store.create()
+				.then(() => {
+					return store.get('timerIntervalstore')
+				})
+				.then((value) => {
+					if (value) {
+						this.timerIntervals = JSON.parse(value);
+					}
+				})
+				.finally(() => {
+					this.loading = false;
+				})
+		},
+		clearStore() {
+			this.timerIntervals = [];
+			this.persistStore();
+		}
+	}
+});

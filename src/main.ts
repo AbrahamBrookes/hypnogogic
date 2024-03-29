@@ -67,8 +67,12 @@ router.isReady().then(() => {
 import { useTimerStore } from '@stores/timerStore';
 const timerStore = useTimerStore();
 timerStore.restoreStore();
+import { useTimerIntervalStore } from '@stores/timerIntervalStore';
+const timerIntervalStore = useTimerIntervalStore();
+timerIntervalStore.restoreStore();
 
 // stuff we want to do just for cypress's sake
 if (window.Cypress) {
 	window.timerStore = timerStore   // test can see window.store
+	window.timerIntervalStore = timerIntervalStore   // test can see window.store
 }
