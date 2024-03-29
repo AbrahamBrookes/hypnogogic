@@ -14,7 +14,9 @@ export const pageSlideAnimation = (baseEl: HTMLElement, opts: AnimationOptions):
   const leavingAnimation = createAnimation()
     .addElement(opts.leavingEl)
     .fromTo('transform', 'translateX(0%)', 'translateX(-100%)')
-    .fromTo('opacity', 1, 0.01);
+    .fromTo('opacity', 1, 0.01)
+	// hide when animation is done
+	.afterStyles({ display: 'none' });
 
   // This will animate both the entering and leaving elements
   return createAnimation()
