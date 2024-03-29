@@ -11,6 +11,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+	retries: 2,
 	// set default resolution to 414*869
 	viewportWidth: 414,
 	viewportHeight: 869,
