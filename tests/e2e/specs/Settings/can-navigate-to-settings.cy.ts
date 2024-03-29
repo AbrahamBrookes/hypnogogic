@@ -20,5 +20,10 @@ describe('Settings page', () => {
 		// Check that we have navigated to /settings
 		cy.url()
 			.should('include', '/settings');
+		
+		// check we can see the settings page
+		cy.get('[data-testid="settings-page"]')
+			.should('exist');
+		// can't check visible because cypress doesn't close the app menu for whatever reason
 	});
 });
