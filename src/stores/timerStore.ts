@@ -35,20 +35,30 @@ export const useTimerStore = defineStore('timerStore', {
 
 			this.persistStore();
 		},
-		removeTimer(remove: string | TimerInterface) {
+		updateTimer(timer: TimerInterface) {
+			const index = this.timers.findIndex(t => t.id === timer.id);
+			if (index >= 0) {
+				this.timers[index] = {...timer}; // spreading the timer object to avoid reference issues
+			}
+
+			this.persistStore();
+		},
+		removeTimer(remove: TimerInterface) {
 			this.timers = this.timers.filter(timer => {
-				if (typeof remove === 'string') {
-					return timer.id !== remove;
-				}
 				return timer !== remove;
 			});
+
+			this.persistStore();
+		},
+		find(id: string): TimerInterface | undefined {
+			return this.timers.find(t => t.id === id);
 		},
 		toggleTimerEnabled(timer: TimerInterface, enabled: boolean) {
 			const index = this.timers.findIndex(t => t.id === timer.id);
 			if (index >= 0) {
 				this.timers[index].enabled = enabled;
 			}
-			
+
 			this.persistStore();
 		},
 		persistStore() {
@@ -57,7 +67,6 @@ export const useTimerStore = defineStore('timerStore', {
 			store.create()
 				.then(() => {
 					store.set('timerStore', JSON.stringify(this.timers));
-
 				})
 				.finally(() => {
 					this.saving = false;
