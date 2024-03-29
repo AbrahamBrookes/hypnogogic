@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { IonGrid, IonRow, IonCol, IonRippleEffect  } from '@ionic/vue';
 import step0imgUrl from '@media/welcome-step-0.png';
+import { useRoute, useRouter } from 'vue-router';
+const router = useRouter();
+
+function next() {
+	localStorage.setItem('hasBeenWelcomed', 'true');
+	// navigate to /home
+	router.push('/welcome-1');
+}
+
 </script>
 
 <template>
@@ -27,7 +36,8 @@ import step0imgUrl from '@media/welcome-step-0.png';
 			<IonRow>
 				<IonCol>
 					<IonButton
-						href="/welcome-1"
+						@click="next"
+						router-animation="forward"
 						data-testid="welcome-flow-next"
 					>
 						Next
