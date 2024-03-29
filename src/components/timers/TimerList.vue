@@ -1,0 +1,42 @@
+<script setup lang="ts">
+import TimerListItem from '@components/timers/TimerListItem.vue';
+import Card from '@components/interface/Card.vue';
+
+import { useTimerStore } from '@stores/timerStore';
+const timerStore = useTimerStore();
+const timers = timerStore.timers;
+
+import { useIonRouter } from '@ionic/vue';
+const router = useIonRouter();
+
+function createTimer() {
+	router.push({ name: 'CreateTimer' });
+}
+</script>
+
+<template>
+	<div
+		class="ion-padding-horizontal ion-margin-horizontal"
+		data-testid="timer-list"
+	>
+		<h1>Timers</h1>
+		<TimerListItem
+			v-for="timer in timers"
+			:key="timer.id"
+			:timer="timer"
+		/>
+		<Card
+			v-if="!timers.length"
+			class="ion-padding-vertical"
+		>
+			No timers created yet
+		</Card>
+		<IonButton
+			@click="createTimer"
+			class="ion-margin-top"
+			data-testid="create-timer-button"
+		>
+			Create Timer
+		</IonButton>
+	</div>
+</template>

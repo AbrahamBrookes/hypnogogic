@@ -38,6 +38,11 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/folder/:id',
 		component: () => import('@pages/FolderPage.vue')
+	},
+	{
+		path: '/timers/create',
+		component: () => import('@pages/CreateTimerPage.vue'),
+		name: 'CreateTimer'
 	}
 ]
 

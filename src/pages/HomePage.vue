@@ -1,3 +1,6 @@
+<script setup lang="ts">
+import TimerList from '@components/timers/TimerList.vue';
+</script>
 
 <template>
 	<IonPage>
@@ -17,9 +20,8 @@
 		  </IonToolbar>
 		</IonHeader>
   
-		<div id="container">
-		  <strong class="capitalize">{{ $route.params.id }}</strong>
-		  <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+		<div id="container ion-align-items-start">
+		  <TimerList></TimerList>
 		</div>
 	  </IonContent>
 	</IonPage>

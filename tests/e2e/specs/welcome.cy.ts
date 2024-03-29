@@ -3,9 +3,6 @@
  * screen flow with some text that they can click the next button to move to the next screen
  */
 
-// we need to import the router so we can navigate to the welcome flow
-import router from '../../../src/router';
-
 describe('Welcome flow', () => {
 	// in the before hook, remove the local storage item that indicates the user has completed the welcome flow
 	before(() => {
