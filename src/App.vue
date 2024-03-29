@@ -27,10 +27,18 @@
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
     </ion-split-pane>
+
+	<!-- pre load these images for the welcome flow-->
+	<img :src="step0imgUrl" alt="Welcome" style="display:none" />
+	<img :src="step1imgUrl" alt="Welcome" style="display:none" />
+	<img :src="step2imgUrl" alt="Welcome" style="display:none" />
   </ion-app>
 </template>
 
 <script setup lang="ts">
+import step0imgUrl from '@media/welcome-step-0.png';
+import step1imgUrl from '@media/welcome-step-1.png';
+import step2imgUrl from '@media/welcome-step-2.png';
 import {
   IonApp,
   IonContent,
