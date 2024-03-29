@@ -17,6 +17,7 @@
 	  "@components/*": ["./src/components/*"],
 	  "@pages/*": ["./src/pages/*"],
 	  "@media/*": ["./src/media/*"],
+	  "@stores/*": ["./src/stores/*"],
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
