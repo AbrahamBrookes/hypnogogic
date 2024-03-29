@@ -18,3 +18,10 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// always add the local storage 'hasBeenWelcomed' item to the local storage
+beforeEach(() => {
+	cy.window().then((window) => {
+		window.localStorage.setItem('hasBeenWelcomed', 'true');
+	});
+});
