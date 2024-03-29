@@ -49,6 +49,11 @@ const routes: Array<RouteRecordRaw> = [
 		component: () => import('@pages/EditTimerPage.vue'),
 		name: 'Timer'
 	},
+	{
+		path: '/settings',
+		component: () => import('@pages/SettingsPage.vue'),
+		name: 'Settings'
+	}
 ]
 
 const router = createRouter({
