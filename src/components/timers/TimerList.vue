@@ -33,7 +33,7 @@ function createTimer() {
 		</Card>
 		<IonButton
 			@click="createTimer"
-			class="ion-margin-top"
+			class="ion-float-right"
 			data-testid="create-timer-button"
 		>
 			Create Timer

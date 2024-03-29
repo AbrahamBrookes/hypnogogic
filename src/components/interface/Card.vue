@@ -7,7 +7,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<IonCard class="ion-no-margin">
+	<IonCard class="ion-no-margin ion-margin-bottom">
 		<IonCardHeader v-if="title || subtitle || $slots.title">
 			<IonCardTitle
 				v-if="title || $slots.title"
