@@ -12,7 +12,7 @@ describe('Editing an existing timer', () => {
 		cy.window().then((window) => {
 			window.timerStore.addTimer({
 				name: 'My new timer',
-				startAt: '04:36',
+				start_at: '04:36',
 				sound: 'bell',
 			});
 

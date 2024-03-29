@@ -32,7 +32,7 @@ function toggle(toggleTo: boolean) {
 		</template>
 		<IonGrid>
 			<IonRow>
-				Starting at: {{ timer.startAt }}
+				Starting at: {{ timer.start_at }}
 			</IonRow>
 			<IonRow class="ion-justify-content-end">
 				<IonButton

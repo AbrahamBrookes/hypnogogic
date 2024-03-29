@@ -16,7 +16,7 @@ const timerStore = useTimerStore();
 const form = reactive<TimerInterface>({
 	id: '',
 	name: '',
-	startAt: '',
+	start_at: '',
 	sound: '',
 	enabled: true,
 });
@@ -31,7 +31,7 @@ function saveTimer() {
 	
 	// reset the form
 	form.name = '';
-	form.startAt = '';
+	form.start_at = '';
 	form.sound = '';
 	form.enabled = true;
 }
@@ -42,7 +42,7 @@ function validateForm() {
 		return false;
 	}
 
-	if (! form.startAt) {
+	if (! form.start_at) {
 		alert('Please provide a start time for the timer');
 		return false;
 	}
@@ -84,7 +84,7 @@ function validateForm() {
 						type="time"
 						label="Start at:"
 						helper-text="(This is the time that the first alarm will go off)"
-						v-model="form.startAt"
+						v-model="form.start_at"
 						data-testid="timer-start-at-input"
 					/>
 				</Card>
