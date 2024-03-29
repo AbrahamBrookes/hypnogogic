@@ -35,3 +35,14 @@
 //     }
 //   }
 // }
+
+/**
+ * Ionic uses shadowdom which makes clicking on IonButtons hard. This command helps us click on IonButtons
+ */
+Cypress.Commands.add('ionButtonClick', (selector: string) => {
+	cy.get(selector)
+	  .should('be.visible')
+	  .shadow()
+	  .find('a, button')
+	  .click({force: true});
+});
