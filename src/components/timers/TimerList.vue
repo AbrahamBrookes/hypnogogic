@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import TimerListItem from '@components/timers/TimerListItem.vue';
 import Card from '@components/interface/Card.vue';
-
-import { useTimerStore } from '@stores/timerStore';
-const timerStore = useTimerStore();
-const timers = timerStore.timers;
+import { TimerInterface } from '@/stores/timerStore';
 
 import { useIonRouter } from '@ionic/vue';
 const router = useIonRouter();
@@ -12,6 +9,10 @@ const router = useIonRouter();
 function createTimer() {
 	router.push({ name: 'CreateTimer' });
 }
+
+const props = defineProps<{
+	timers: TimerInterface[];
+}>();
 </script>
 
 <template>

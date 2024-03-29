@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import TimerList from '@components/timers/TimerList.vue';
+
+import { useTimerStore } from '@stores/timerStore';
+const timerStore = useTimerStore();
 </script>
 
 <template>
@@ -21,7 +24,10 @@ import TimerList from '@components/timers/TimerList.vue';
 		</IonHeader>
   
 		<div id="container ion-align-items-start">
-		  <TimerList></TimerList>
+		  <TimerList
+		    :timers="timerStore.timers"
+		  >
+		  </TimerList>
 		</div>
 	  </IonContent>
 	</IonPage>
