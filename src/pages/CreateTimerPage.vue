@@ -18,11 +18,36 @@ const form = reactive<TimerInterface>({
 	name: '',
 	startAt: '',
 	sound: '',
+	enabled: true,
 });
 
 function saveTimer() {
+	if (! validateForm()) {
+		return;
+	}
+
 	timerStore.addTimer(form);
 	router.push({ name: 'Home' });
+	
+	// reset the form
+	form.name = '';
+	form.startAt = '';
+	form.sound = '';
+	form.enabled = true;
+}
+
+function validateForm() {
+	if (! form.name) {
+		alert('Please provide a name for the timer');
+		return false;
+	}
+
+	if (! form.startAt) {
+		alert('Please provide a start time for the timer');
+		return false;
+	}
+
+	return true;
 }
 
 </script>
