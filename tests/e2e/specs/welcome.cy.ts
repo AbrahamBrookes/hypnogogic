@@ -5,7 +5,7 @@
 
 describe('Welcome flow', () => {
 	// in the before hook, remove the local storage item that indicates the user has completed the welcome flow
-	before(() => {
+	beforeEach(() => {
 		cy.clearLocalStorage();
 	});
 

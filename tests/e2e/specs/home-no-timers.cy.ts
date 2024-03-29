@@ -5,6 +5,14 @@
  */
 
 describe('Home screen with no timers', () => {
+	before(() => {	
+		cy.visit('/home');
+		
+		cy.window().then((window) => {
+			window.timerStore.clearStore();
+		});
+	});
+
 	specify('The user should not have any timers', () => {
 		cy.visit('/home');
 
