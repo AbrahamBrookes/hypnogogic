@@ -14,20 +14,38 @@ function toggle(toggleTo: boolean) {
 </script>
 
 <template>
-	<Card>
+	<Card :data-testid="'timer-list-item-' + timer.id">
 		<template #title>
-			<div style="display: flex" class="ion-justify-content-between">
-				<IonLabel>
+			<div class="flex ion-justify-content-between">
+				<IonLabel
+					class="ion-text-wrap"
+				>
 					{{ timer.name }}
 				</IonLabel>
 				<IonToggle
 					:checked="timer.enabled"
 					@ion-change="toggle($event.detail.checked)"
+					data-testid="timer-enabled-toggle"
+					class="ion-margin-end"
 				></IonToggle>
 			</div>
 		</template>
-		<IonLabel>
-			Starting at: {{ timer.startAt }}
-		</IonLabel>
+		<IonGrid>
+			<IonRow>
+				Starting at: {{ timer.startAt }}
+			</IonRow>
+			<IonRow class="ion-justify-content-end">
+				<IonButton
+					:router-link="'/timers/edit/' + timer.id"
+					router-animation="forward"
+					data-testid="edit-timer-button"
+					size="small"
+					fill="clear"
+					class="ion-no-margin"
+				>
+					Edit
+				</IonButton>
+			</IonRow>
+		</IonGrid>
 	</Card>
 </template>
