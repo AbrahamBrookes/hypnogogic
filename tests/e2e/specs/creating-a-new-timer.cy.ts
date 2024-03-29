@@ -8,10 +8,31 @@ describe('Creating a new timer', () => {
 
 		// Fill out the form
 		cy.get('[data-testid=timer-name-input]')
-			.type('My new timer');
+			.within(() => {
+				cy.get('input')
+				.first()
+				.type('My new timer');
+			});
 
 		cy.get('[data-testid=timer-start-at-input]')
-			.type('04:36');
+			.within(() => {
+				cy.get('input')
+				.first()
+				.type('04:36');
+			});
+		
+		// adding intervals
+		cy.ionButtonClick('[data-testid=add-interval-button]');
+
+		cy.get('[data-testid=interval-name-input]')
+			.should('exist')
+			.and('be.visible')
+			.within(() => {
+				cy.get('input')
+				.first()
+				.type('My new interval');
+			});
+
 
 		// Click the create timer button
 		cy.ionButtonClick('[data-testid=save-timer-button]');

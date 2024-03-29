@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 import { onIonViewDidEnter } from '@ionic/vue';
 
 import Card from '@/components/interface/Card.vue';
+import CreateTimerIntervalRow from '@components/timerIntervals/CreateTimerIntervalRow.vue';
 import { TimerInterface } from '@stores/timerStore';
+import { TimerIntervalInterface } from '@stores/timerIntervalStore';
 
 import { IonButton, IonInput, IonRow } from '@ionic/vue';
 import { save, arrowBack, trash } from 'ionicons/icons';
@@ -15,6 +17,9 @@ const route = useRoute();
 
 import { useTimerStore } from '@stores/timerStore';
 const timerStore = useTimerStore();
+
+import { useTimerIntervalStore } from '@stores/timerIntervalStore';
+const timerIntervalStore = useTimerIntervalStore();
 
 const timerId = route.params.id;
 
@@ -77,6 +82,23 @@ function deleteTimer() {
 	timerStore.removeTimer(form);
 	router.push({ name: 'Home' });
 }
+
+function addInterval() {
+	timerIntervalStore.addTimerInterval({
+		id: '',
+		timer_id: form.id,
+		duration: 0,
+		sound: '',
+	});
+}
+
+const intervals = computed(() => {
+	return timerIntervalStore.getForTimer(form.id);
+});
+
+function updateInterval(interval: TimerIntervalInterface) {
+	timerIntervalStore.updateTimerInterval(interval);
+}
 </script>
 
 <template>
@@ -134,6 +156,27 @@ function deleteTimer() {
 						v-model="form.start_at"
 						data-testid="timer-start-at-input"
 					/>
+					<IonGrid>
+						<IonRow>
+							<IonCol class="ion-justify-items-end">
+								<IonButton
+									@click="addInterval"
+									data-testid="add-interval-button"
+									size="small"
+									fill="clear"
+									class="ion-no-margin ion-float-right ion-no-padding"
+								>
+									<IonIcon :icon="add" class="ion-margin-end"></IonIcon> Add Interval
+								</IonButton>
+							</IonCol>
+						</IonRow>
+						<CreateTimerIntervalRow
+							v-for="interval in intervals"
+							:key="interval.id"
+							:timer-interval="interval"
+							@update="updateInterval"
+						/>
+					</IonGrid>
 				</Card>
 
 				<IonGrid>

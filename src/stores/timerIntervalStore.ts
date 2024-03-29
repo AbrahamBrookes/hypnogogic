@@ -17,7 +17,7 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 		timerIntervals: [] as TimerIntervalInterface[],
 	}),
 	actions: {
-		addTimer(timerInterval: TimerIntervalInterface) {
+		addTimerInterval(timerInterval: TimerIntervalInterface) {
 			console.log('Adding timer interval', timerInterval);
 			
 			this.timerIntervals.push({
@@ -27,7 +27,7 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 
 			this.persistStore();
 		},
-		updateTimer(timerInterval: TimerIntervalInterface) {
+		updateTimerInterval(timerInterval: TimerIntervalInterface) {
 			const index = this.timerIntervals.findIndex(t => t.id === timerInterval.id);
 			if (index >= 0) {
 				this.timerIntervals[index] = {...timerInterval}; // spreading the timerInterval object to avoid reference issues
@@ -35,7 +35,7 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 
 			this.persistStore();
 		},
-		removeTimer(remove: TimerIntervalInterface) {
+		removeTimerInterval(remove: TimerIntervalInterface) {
 			this.timerIntervals = this.timerIntervals.filter(timerInterval => {
 				return timerInterval !== remove;
 			});
@@ -44,6 +44,9 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 		},
 		find(id: string): TimerIntervalInterface | undefined {
 			return this.timerIntervals.find(t => t.id === id);
+		},
+		getForTimer(timer_id: string): TimerIntervalInterface[] {
+			return this.timerIntervals.filter(t => t.timer_id === timer_id);
 		},
 		persistStore() {
 			this.saving = true;
