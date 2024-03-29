@@ -13,7 +13,8 @@ import {
 	IonMenuButton,
 	IonPage,
 	IonTitle,
-	IonToolbar
+	IonToolbar,
+	IonIcon
 } from '@ionic/vue';
 
 /* Core CSS required for Ionic components to work properly */
@@ -46,7 +47,8 @@ const app = createApp(App)
   .component('IonButton', IonButton)
   .component('IonMenuButton', IonMenuButton)
   .component('IonTitle', IonTitle)
-  .component('IonToolbar', IonToolbar);
+  .component('IonToolbar', IonToolbar)
+  .component('IonIcon', IonIcon);
   
 router.isReady().then(() => {
   app.mount('#app');
