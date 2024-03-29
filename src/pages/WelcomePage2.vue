@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { IonGrid, IonRow, IonCol, IonRippleEffect  } from '@ionic/vue';
 import step2imgUrl from '@media/welcome-step-2.png';
-
 import { useRoute, useRouter } from 'vue-router';
 const router = useRouter();
 

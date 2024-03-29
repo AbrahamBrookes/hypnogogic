@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { IonGrid, IonRow, IonCol, IonRippleEffect  } from '@ionic/vue';
 import step1imgUrl from '@media/welcome-step-1.png';
-import { useRoute, useRouter } from 'vue-router';
-const router = useRouter();
+import { pageSlideAnimation } from '@/router/animations'
+import { useIonRouter } from '@ionic/vue';
+const router = useIonRouter();
 
 function next() {
 	localStorage.setItem('hasBeenWelcomed', 'true');
 	// navigate to /home
-	router.push('/welcome-2');
+	router.push('/welcome-2', pageSlideAnimation);
 }
 
 </script>
