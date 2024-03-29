@@ -55,3 +55,4 @@ router.isReady().then(() => {
 // load our pinia stores from storage
 import { useTimerStore } from '@stores/timerStore';
 const timerStore = useTimerStore();
+timerStore.restoreStore();
