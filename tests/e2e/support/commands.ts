@@ -41,7 +41,7 @@
  */
 Cypress.Commands.add('ionButtonClick', (selector: string) => {
 	cy.get(selector)
-	  .should('be.visible')
+	  .filter(':visible')
 	  .shadow()
 	  .find('a, button')
 	  .click({force: true});
