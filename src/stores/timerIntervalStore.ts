@@ -19,6 +19,12 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 	actions: {
 		addTimerInterval(timerInterval: TimerIntervalInterface) {
 			console.log('Adding timer interval', timerInterval);
+
+			// only allow one timerinterval with no timer_id at a time
+			// this is so we don't have a bunch of dangling creates in there
+			if (this.timerIntervals.find(t => !t.timer_id)) {
+				return;
+			}
 			
 			this.timerIntervals.push({
 				...timerInterval,
