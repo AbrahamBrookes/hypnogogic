@@ -70,9 +70,14 @@ timerStore.restoreStore();
 import { useTimerIntervalStore } from '@stores/timerIntervalStore';
 const timerIntervalStore = useTimerIntervalStore();
 timerIntervalStore.restoreStore();
+import { useAppSettingStore } from '@stores/appSettingStore';
+const appSettingStore = useAppSettingStore();
+appSettingStore.restoreStore();
 
 // stuff we want to do just for cypress's sake
 if (window.Cypress) {
-	window.timerStore = timerStore   // test can see window.store
-	window.timerIntervalStore = timerIntervalStore   // test can see window.store
+	// expose stores to cupress via window
+	window.timerStore = timerStore
+	window.timerIntervalStore = timerIntervalStore
+	window.appSettingStore = appSettingStore
 }
