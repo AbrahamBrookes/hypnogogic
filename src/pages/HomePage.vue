@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import TimerList from '@components/timers/TimerList.vue';
+import ToggleAppMenuButton from '@components/interface/ToggleAppMenuButton.vue';
 
 import { useTimerStore } from '@stores/timerStore';
 const timerStore = useTimerStore();
@@ -10,7 +11,7 @@ const timerStore = useTimerStore();
 	  <IonHeader :translucent="true">
 		<IonToolbar>
 		  <IonButtons slot="start">
-			<IonMenuButton color="primary"></IonMenuButton>
+			<ToggleAppMenuButton />
 		  </IonButtons>
 		  <IonTitle>{{ $route.params.id }}</IonTitle>
 		</IonToolbar>

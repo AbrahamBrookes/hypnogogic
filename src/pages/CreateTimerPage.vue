@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue';
 
-import Card from '@/components/interface/Card.vue';
+import Card from '@components/interface/Card.vue';
+import ToggleAppMenuButton from '@components/interface/ToggleAppMenuButton.vue';
 import CreateTimerIntervalRow from '@components/timerIntervals/CreateTimerIntervalRow.vue';
 import { TimerInterface } from '@stores/timerStore';
 import { TimerIntervalInterface } from '@stores/timerIntervalStore';
@@ -82,7 +83,7 @@ function updateInterval(interval: TimerIntervalInterface) {
 		<IonHeader :translucent="true">
 			<IonToolbar>
 				<IonButtons slot="start">
-					<IonMenuButton color="primary"></IonMenuButton>
+					<ToggleAppMenuButton />
 				</IonButtons>
 				<IonTitle>Create Timer</IonTitle>
 			</IonToolbar>
