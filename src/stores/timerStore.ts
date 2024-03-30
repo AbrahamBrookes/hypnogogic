@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia';
 import { Storage } from '@ionic/storage';
 import { v4 as uuidv4 } from 'uuid';
+import { SoundInterface } from '@stores/soundStore';
 
 // the Timer is the main object we are storing in the store
 export interface TimerInterface {
 	id: string;
 	name: string;
 	start_at: string;
-	sound: string;
+	sound: SoundInterface;
 	enabled: boolean;
 }
 

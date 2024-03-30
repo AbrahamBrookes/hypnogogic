@@ -7,9 +7,10 @@ import ToggleAppMenuButton from '@components/interface/ToggleAppMenuButton.vue';
 import CreateTimerIntervalRow from '@components/timerIntervals/CreateTimerIntervalRow.vue';
 import { TimerInterface } from '@stores/timerStore';
 import { TimerIntervalInterface } from '@stores/timerIntervalStore';
+import { SoundInterface } from '@stores/soundStore';
 
 import { IonButton, IonGrid, IonInput } from '@ionic/vue';
-import { add, save } from 'ionicons/icons';
+import { add, save, arrowBack } from 'ionicons/icons';
 
 import { useIonRouter } from '@ionic/vue';
 const router = useIonRouter();
@@ -25,7 +26,10 @@ const form = reactive<TimerInterface>({
 	id: '',
 	name: '',
 	start_at: '',
-	sound: '',
+	sound: {
+		name: '',
+		src: '',
+	} as SoundInterface,
 	enabled: true,
 });
 
@@ -45,7 +49,10 @@ function saveTimer() {
 			// reset the form
 			form.name = '';
 			form.start_at = '';
-			form.sound = '';
+			form.sound = {
+				name: '',
+				src: '',
+			} as SoundInterface;
 			form.enabled = true;
 
 			// return back to home
@@ -96,7 +103,7 @@ function updateInterval(interval: TimerIntervalInterface) {
 	timerIntervalStore.updateTimerInterval(interval);
 }
 
-function soundSelected(sound: string) {
+function soundSelected(sound: SoundInterface) {
 	form.sound = sound;
 }
 </script>
@@ -121,13 +128,14 @@ function soundSelected(sound: string) {
 
 			<div id="container" class="ion-align-items-start ion-padding">
 				<Card
-					title="General"
+					subtitle="General"
 				>
 					<IonInput
 						placeholder="ie 'WBTB 4.5hrs'"
 						label="Name:"
 						v-model="form.name"
 						data-testid="timer-name-input"
+						class="ion-margin-bottom"
 					/>
 					<IonInput
 						type="time"
@@ -135,15 +143,10 @@ function soundSelected(sound: string) {
 						helper-text="(This is the time that the first alarm will go off)"
 						v-model="form.start_at"
 						data-testid="timer-start-at-input"
+						class="ion-margin-bottom"
 					/>
-					<IonInput
-						type="text"
-						label="Sound:"
-						helper-text="The sound to play when the timer goes off"
-						v-model="form.sound"
-						data-testid="timer-sound-input"
-						disabled
-					/>
+					
+					<IonLabel>Select a sound:</IonLabel>
 					<SoundSelector
 						:selected-sound="form.sound"
 						@sound-selected="soundSelected"

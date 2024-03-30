@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-const props = defineProps<{
-  sound: string;
-  selectedSound: string;
-}>();
+import { SoundInterface } from '@stores/soundStore';
 
-// import the png url from @media/sound_icons/{props.sound}
-const soundIconUrl = computed(() => `/sound_icons/${props.sound}.png`);
+const props = defineProps<{
+  sound: SoundInterface;
+  selectedSound: SoundInterface;
+}>();
 </script>
 
 <template>
 	<img
-		:src="soundIconUrl"
+		:src="sound.icon"
 		:class="{
-			selectedSound: selectedSound == sound
+			selectedSound: selectedSound.src == sound.src
 		}"
 		@click="$emit('select', sound)"
+		:data-testid="'sound-select-icon-' + sound.id"
 	/>
 </template>
