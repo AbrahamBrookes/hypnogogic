@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface AppSettingInterface {
 	id: string;
 	name: string;
-	value: number;
+	value: string;
 }
 
 export const useAppSettingStore = defineStore('appSettingStore', {
@@ -17,60 +17,50 @@ export const useAppSettingStore = defineStore('appSettingStore', {
 			{
 				id: uuidv4(),
 				name: 'hasBeenWelcomed',
-				value: 0,
+				value: '0',
 			}
 		] as AppSettingInterface[],
 	}),
 	actions: {
-		updateAppSetting(appSetting: AppSettingInterface) {
-			const index = this.appSettings.findIndex(t => t.id === appSetting.id);
+		async updateAppSetting(name: string, value: string) {
+			const index = this.appSettings.findIndex(t => t.name === name);
 			if (index >= 0) {
-				this.appSettings[index] = {...appSetting}; // spreading the appSetting object to avoid reference issues
+				this.appSettings[index].value = value;
 			}
-
-			this.persistStore();
+			await this.persistStore();
 		},
-		removeAppSetting(remove: AppSettingInterface) {
+		async removeAppSetting(remove: AppSettingInterface) {
 			this.appSettings = this.appSettings.filter(appSetting => {
 				return appSetting !== remove;
 			});
 
-			this.persistStore();
+			await this.persistStore();
 		},
 		find(id: string): AppSettingInterface | undefined {
 			return this.appSettings.find(t => t.id === id) ||
 				this.appSettings.find(t => t.name === id);
 		},
-		persistStore() {
+		async persistStore() {
 			this.saving = true;
 			const store = new Storage();
-			store.create()
-				.then(() => {
-					store.set('appSettingstore', JSON.stringify(this.appSettings));
-				})
-				.finally(() => {
-					this.saving = false;
-				})
+			await store.create()
+			await store.set('appSettingstore', JSON.stringify(this.appSettings));
+			
+			this.saving = false;
 		},
-		restoreStore() {
+		async restoreStore() {
 			this.loading = true;
 			const store = new Storage();
-			store.create()
-				.then(() => {
-					return store.get('appSettingstore')
-				})
-				.then((value) => {
-					if (value) {
-						this.appSettings = JSON.parse(value);
-					}
-				})
-				.finally(() => {
-					this.loading = false;
-				})
+			await store.create()
+			const serialized = await store.get('appSettingstore')
+			if (serialized) {
+				this.appSettings = JSON.parse(serialized);
+			}
+			this.loading = false;
 		},
-		clearStore() {
+		async clearStore() {
 			this.appSettings = [];
-			this.persistStore();
+			await this.persistStore();
 		}
 	}
 });

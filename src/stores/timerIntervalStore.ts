@@ -17,7 +17,7 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 		timerIntervals: [] as TimerIntervalInterface[],
 	}),
 	actions: {
-		addTimerInterval(timerInterval: TimerIntervalInterface) {
+		async addTimerInterval(timerInterval: TimerIntervalInterface) {
 			console.log('Adding timer interval', timerInterval);
 
 			// only allow one timerinterval with no timer_id at a time
@@ -31,22 +31,22 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 				id: uuidv4(),
 			});
 
-			this.persistStore();
+			await this.persistStore();
 		},
-		updateTimerInterval(timerInterval: TimerIntervalInterface) {
+		async updateTimerInterval(timerInterval: TimerIntervalInterface) {
 			const index = this.timerIntervals.findIndex(t => t.id === timerInterval.id);
 			if (index >= 0) {
 				this.timerIntervals[index] = {...timerInterval}; // spreading the timerInterval object to avoid reference issues
 			}
 
-			this.persistStore();
+			await this.persistStore();
 		},
-		removeTimerInterval(remove: TimerIntervalInterface) {
+		async removeTimerInterval(remove: TimerIntervalInterface) {
 			this.timerIntervals = this.timerIntervals.filter(timerInterval => {
 				return timerInterval !== remove;
 			});
 
-			this.persistStore();
+			await this.persistStore();
 		},
 		find(id: string): TimerIntervalInterface | undefined {
 			return this.timerIntervals.find(t => t.id === id);
@@ -54,36 +54,26 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 		getForTimer(timer_id: string): TimerIntervalInterface[] {
 			return this.timerIntervals.filter(t => t.timer_id === timer_id);
 		},
-		persistStore() {
+		async persistStore() {
 			this.saving = true;
 			const store = new Storage();
-			store.create()
-				.then(() => {
-					store.set('timerIntervalstore', JSON.stringify(this.timerIntervals));
-				})
-				.finally(() => {
-					this.saving = false;
-				})
+			await store.create();
+			await store.set('timerIntervalstore', JSON.stringify(this.timerIntervals));
+			this.saving = false;
 		},
-		restoreStore() {
+		async restoreStore() {
 			this.loading = true;
 			const store = new Storage();
-			store.create()
-				.then(() => {
-					return store.get('timerIntervalstore')
-				})
-				.then((value) => {
-					if (value) {
-						this.timerIntervals = JSON.parse(value);
-					}
-				})
-				.finally(() => {
-					this.loading = false;
-				})
+			await store.create();
+			const value = await store.get('timerIntervalstore')
+			if (value) {
+				this.timerIntervals = JSON.parse(value);
+			}
+			this.loading = false;
 		},
-		clearStore() {
+		async clearStore() {
 			this.timerIntervals = [];
-			this.persistStore();
+			await this.persistStore();
 		}
 	}
 });

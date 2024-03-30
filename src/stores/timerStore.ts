@@ -18,7 +18,7 @@ export const useTimerStore = defineStore('timerStore', {
 		timers: [] as TimerInterface[],
 	}),
 	actions: {
-		addTimer(timer: TimerInterface) {
+		async addTimer(timer: TimerInterface) {
 			console.log('Adding timer', timer);
 			
 			this.timers.push({
@@ -27,64 +27,54 @@ export const useTimerStore = defineStore('timerStore', {
 				enabled: true,
 			});
 
-			this.persistStore();
+			await this.persistStore();
 		},
-		updateTimer(timer: TimerInterface) {
+		async updateTimer(timer: TimerInterface) {
 			const index = this.timers.findIndex(t => t.id === timer.id);
 			if (index >= 0) {
 				this.timers[index] = {...timer}; // spreading the timer object to avoid reference issues
 			}
 
-			this.persistStore();
+			await this.persistStore();
 		},
-		removeTimer(remove: TimerInterface) {
+		async removeTimer(remove: TimerInterface) {
 			this.timers = this.timers.filter(timer => {
 				return timer !== remove;
 			});
 
-			this.persistStore();
+			await this.persistStore();
 		},
 		find(id: string): TimerInterface | undefined {
 			return this.timers.find(t => t.id === id);
 		},
-		toggleTimerEnabled(timer: TimerInterface, enabled: boolean) {
+		async toggleTimerEnabled(timer: TimerInterface, enabled: boolean) {
 			const index = this.timers.findIndex(t => t.id === timer.id);
 			if (index >= 0) {
 				this.timers[index].enabled = enabled;
 			}
 
-			this.persistStore();
+			await this.persistStore();
 		},
-		persistStore() {
+		async persistStore() {
 			this.saving = true;
 			const store = new Storage();
-			store.create()
-				.then(() => {
-					store.set('timerStore', JSON.stringify(this.timers));
-				})
-				.finally(() => {
-					this.saving = false;
-				})
+			await store.create();
+			await store.set('timerStore', JSON.stringify(this.timers));
+			this.saving = false;
 		},
-		restoreStore() {
+		async restoreStore() {
 			this.loading = true;
 			const store = new Storage();
-			store.create()
-				.then(() => {
-					return store.get('timerStore')
-				})
-				.then((value) => {
-					if (value) {
-						this.timers = JSON.parse(value);
-					}
-				})
-				.finally(() => {
-					this.loading = false;
-				})
+			await store.create();
+			const value = await store.get('timerStore')
+			if (value) {
+				this.timers = JSON.parse(value);
+			}
+			this.loading = false;
 		},
-		clearStore() {
+		async clearStore() {
 			this.timers = [];
-			this.persistStore();
+			await this.persistStore();
 		}
 	}
 });
