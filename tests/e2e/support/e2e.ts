@@ -24,5 +24,7 @@ beforeEach(() => {
 	cy.visit('/');
 	cy.window().then(async (window) => {
 		await window.appSettingStore.updateAppSetting('hasBeenWelcomed', '1');
+		await window.timerStore.clearStore();
+		await window.timerIntervalStore.clearStore();
 	});
 });
