@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { IonGrid, IonRow, IonCol, IonRippleEffect  } from '@ionic/vue';
 import step2imgUrl from '@media/welcome-step-2.png';
-import { useRoute, useRouter } from 'vue-router';
-const router = useRouter();
+
+import { useAppSettingStore } from '@stores/appSettingStore';
+const appSettingStore = useAppSettingStore();
+
+import { useIonRouter } from '@ionic/vue';
+const router = useIonRouter();
 
 function clickStart() {
-	localStorage.setItem('hasBeenWelcomed', 'true');
-	// navigate to /home
-	router.push('/home');
+	appSettingStore.updateAppSetting('hasBeenWelcomed', '1')
+		.then(() => {
+			router.push({ name: 'Home' });
+		});
 }
 </script>
 

@@ -6,8 +6,6 @@ import { useIonRouter } from '@ionic/vue';
 const router = useIonRouter();
 
 function next() {
-	localStorage.setItem('hasBeenWelcomed', 'true');
-	// navigate to /home
 	router.push('/welcome-2', pageSlideAnimation);
 }
 
