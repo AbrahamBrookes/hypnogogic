@@ -36,23 +36,25 @@ describe('Welcome flow', () => {
 		// Check that the second screen is displayed
 		cy.get('[data-testid=welcome-flow-slide-1]')
 			.should('exist')
-			.and('be.visible');
-
-		// Click the next button
-		cy.ionButtonClick('[data-testid=welcome-flow-next]')
+			.and('be.visible')
+			.within(() => {
+				// Click the next button
+				cy.ionButtonClick('[data-testid=welcome-flow-next]')
+			});
 
 		// Check that the third screen is displayed
 		cy.get('[data-testid=welcome-flow-slide-2]')
 			.should('exist')
-			.and('be.visible');
+			.and('be.visible')
+			.within(() => {
+				// Click the next button
+				cy.ionButtonClick('[data-testid=welcome-flow-done]')
+			});
 
 		// Check that the done button is displayed
 		cy.get('[data-testid=welcome-flow-done]')
 			.should('exist')
 			.and('be.visible');
-
-		// Click the next button
-		cy.ionButtonClick('[data-testid=welcome-flow-done]')
 
 		// Check that we have navigated to /home
 		cy.url()
