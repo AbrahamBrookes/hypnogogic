@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { stockSounds } from '@/stores/soundStore';
 import SoundSelectIcon from '@components/sounds/SoundSelectIcon.vue';
 import { ref, computed } from 'vue';
 import { useSoundStore, SoundInterface } from '@stores/soundStore';
@@ -28,14 +27,10 @@ function soundSelected(sound: SoundInterface) {
 </script>
 
 <template>
-	<IonGrid>
+	<IonGrid class="ion-no-margin ion-no-padding ion-margin-vertical">
 		<IonRow>
 			<IonCol>
-				<audio
-					ref="audioPlayer"
-					:src="selectedSound.src"
-					controls
-				/>
+				<IonLabel>Select a sound:</IonLabel>
 			</IonCol>
 		</IonRow>
 		<IonRow v-for="(row, rowIndex) in chunkedSounds" :key="`row-${rowIndex}`">
@@ -44,6 +39,17 @@ function soundSelected(sound: SoundInterface) {
 					:sound="item"
 					:selected-sound="selectedSound"
 					@select="soundSelected"
+				/>
+			</IonCol>
+		</IonRow>
+		<IonRow class="ion-margin-top">
+			<IonCol>
+				<IonLabel>Preview:</IonLabel>
+				<audio
+					ref="audioPlayer"
+					:src="selectedSound.src"
+					controls
+					class="w-100"
 				/>
 			</IonCol>
 		</IonRow>

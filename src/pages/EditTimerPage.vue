@@ -3,10 +3,12 @@ import { computed, reactive } from 'vue';
 import { onIonViewDidEnter } from '@ionic/vue';
 
 import Card from '@/components/interface/Card.vue';
+import SoundSelector from '@components/sounds/SoundSelector.vue';
 import ToggleAppMenuButton from '@components/interface/ToggleAppMenuButton.vue';
 import CreateTimerIntervalRow from '@components/timerIntervals/CreateTimerIntervalRow.vue';
 import { TimerInterface } from '@stores/timerStore';
 import { TimerIntervalInterface } from '@stores/timerIntervalStore';
+import { SoundInterface } from '@/stores/soundStore';
 
 import { IonButton, IonInput, IonRow } from '@ionic/vue';
 import { save, arrowBack, trash, add } from 'ionicons/icons';
@@ -24,7 +26,16 @@ const timerIntervalStore = useTimerIntervalStore();
 
 const timerId = route.params.id;
 
-const form = reactive<TimerInterface>({});
+const form = reactive<TimerInterface>({
+	id: '',
+	name: '',
+	start_at: '',
+	sound: {
+		name: '',
+		src: '',
+	} as SoundInterface,
+	enabled: true,
+});
 
 onIonViewDidEnter(() => {
 	const timer = timerStore.find(timerId);
@@ -46,13 +57,18 @@ function saveTimer() {
 	}
 
 	timerStore.updateTimer(form);
-	router.push({ name: 'Home' });
+
 	
 	// reset the form
 	form.name = '';
 	form.start_at = '';
-	form.sound = '';
+	form.sound = {
+		name: '',
+		src: '',
+	} as SoundInterface;
 	form.enabled = true;
+
+	router.push({ name: 'Home' });
 }
 
 function validateForm() {
@@ -63,6 +79,21 @@ function validateForm() {
 
 	if (! form.start_at) {
 		alert('Please provide a start time for the timer');
+		return false;
+	}
+
+	if (! form.sound) {
+		alert('Please provide a sound for the timer');
+		return false;
+	}
+
+	if (intervals.value.length < 1) {
+		alert('Please provide at least one interval for the timer');
+		return false;
+	}
+
+	if (intervals.value.some(interval => ! interval.duration)) {
+		alert('Please provide a duration for each interval');
 		return false;
 	}
 
@@ -100,6 +131,10 @@ const intervals = computed(() => {
 function updateInterval(interval: TimerIntervalInterface) {
 	timerIntervalStore.updateTimerInterval(interval);
 }
+
+function soundSelected(sound: SoundInterface) {
+	form.sound = sound;
+}
 </script>
 
 <template>
@@ -114,12 +149,6 @@ function updateInterval(interval: TimerIntervalInterface) {
 		</IonHeader>
 
 		<IonContent :fullscreen="true">
-			<IonHeader collapse="condense">
-				<IonToolbar>
-					<IonTitle>Editing Timer</IonTitle>
-				</IonToolbar>
-			</IonHeader>
-
 			<div id="container" class="ion-align-items-start ion-padding">
 				<Card>
 					<template #title>
@@ -157,6 +186,12 @@ function updateInterval(interval: TimerIntervalInterface) {
 						v-model="form.start_at"
 						data-testid="timer-start-at-input"
 					/>
+					
+					<SoundSelector
+						:selected-sound="form.sound"
+						@sound-selected="soundSelected"
+					/>
+
 					<IonGrid>
 						<IonRow>
 							<IonCol class="ion-justify-items-end">

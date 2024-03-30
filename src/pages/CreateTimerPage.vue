@@ -130,15 +130,9 @@ function soundSelected(sound: SoundInterface) {
 		</IonHeader>
 
 		<IonContent :fullscreen="true">
-			<IonHeader collapse="condense">
-				<IonToolbar>
-					<IonTitle>Creating a new Timer</IonTitle>
-				</IonToolbar>
-			</IonHeader>
-
 			<div id="container" class="ion-align-items-start ion-padding">
 				<Card
-					subtitle="General"
+					title="Create a timer"
 				>
 					<IonInput
 						placeholder="ie 'WBTB 4.5hrs'"
@@ -156,7 +150,6 @@ function soundSelected(sound: SoundInterface) {
 						class="ion-margin-bottom"
 					/>
 					
-					<IonLabel>Select a sound:</IonLabel>
 					<SoundSelector
 						:selected-sound="form.sound"
 						@sound-selected="soundSelected"
