@@ -32,14 +32,23 @@ function saveTimer() {
 		return;
 	}
 
-	timerStore.addTimer(form);
-	router.push({ name: 'Home' });
+	timerStore.addTimer(form)
+		// now that the form has an id, update the intervals with the timer_id
+		.then((timer: TimerInterface) => {
+			intervals.value.forEach(async interval => {
+				interval.timer_id = timer.id;
+				await timerIntervalStore.updateTimerInterval(interval);
+			});
 	
-	// reset the form
-	form.name = '';
-	form.start_at = '';
-	form.sound = '';
-	form.enabled = true;
+			// reset the form
+			form.name = '';
+			form.start_at = '';
+			form.sound = '';
+			form.enabled = true;
+
+			// return back to home
+			router.push({ name: 'Home' });
+		});
 }
 
 function validateForm() {
@@ -57,6 +66,9 @@ function validateForm() {
 }
 
 function cancel() {
+	// remove all timer intervals with the form id as the timer_id
+	timerIntervalStore.removeForTimer(form.id);
+
 	router.push({ name: 'Home' });
 }
 
@@ -64,12 +76,12 @@ function addInterval() {
 	timerIntervalStore.addTimerInterval({
 		id: '',
 		timer_id: form.id,
-		duration: 0,
+		duration: null,
 		sound: '',
 	});
 }
 
-const intervals = computed(() => {
+const intervals = computed<TimerIntervalInterface[]>(() => {
 	return timerIntervalStore.getForTimer(form.id);
 });
 

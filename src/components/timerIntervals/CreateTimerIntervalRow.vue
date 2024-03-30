@@ -15,8 +15,8 @@ const form = reactive<TimerIntervalInterface>(props.timerInterval);
 		<IonCol>
 			<IonInput
 				v-model="form.duration"
-				placeholder="Duration"
-				label="Duration (minutes):"
+				placeholder="(minutes)"
+				label="Duration:"
 				data-testid="duration-input"
 				@ion-change="$emit('update', form)"
 			/>

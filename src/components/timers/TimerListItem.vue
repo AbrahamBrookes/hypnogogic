@@ -3,6 +3,9 @@ import Card from '@components/interface/Card.vue';
 import { IonLabel, IonToggle } from '@ionic/vue';
 import { useTimerStore, TimerInterface } from '@stores/timerStore';
 const timerStore = useTimerStore();
+import { useTimerIntervalStore, TimerIntervalInterface } from '@stores/timerIntervalStore';
+import { computed } from 'vue';
+const timerIntervalStore = useTimerIntervalStore();
 
 const props = defineProps<{
 	timer: TimerInterface;
@@ -11,6 +14,10 @@ const props = defineProps<{
 function toggle(toggleTo: boolean) {
 	timerStore.toggleTimerEnabled(props.timer, toggleTo);
 }
+
+const timerIntervals = computed(() => {
+	return timerIntervalStore.getForTimer(props.timer.id);
+});
 </script>
 
 <template>
@@ -31,8 +38,13 @@ function toggle(toggleTo: boolean) {
 			</div>
 		</template>
 		<IonGrid>
-			<IonRow>
-				Starting at: {{ timer.start_at }}
+			<IonRow class="ion-margin-bottom">
+				<IonCol class="ion-no-padding">
+					<IonLabel>{{ timerIntervals.length }} Intervals</IonLabel>
+				</IonCol>
+				<IonCol class="ion-no-padding ion-text-right">
+					Starting at: {{ timer.start_at }}
+				</IonCol>
 			</IonRow>
 			<IonRow class="ion-justify-content-end">
 				<IonButton
@@ -41,7 +53,7 @@ function toggle(toggleTo: boolean) {
 					data-testid="edit-timer-button"
 					size="small"
 					fill="clear"
-					class="ion-no-margin"
+					class="ion-no-margin ion-margin-top"
 				>
 					Edit
 				</IonButton>

@@ -18,7 +18,7 @@ export const useTimerStore = defineStore('timerStore', {
 		timers: [] as TimerInterface[],
 	}),
 	actions: {
-		async addTimer(timer: TimerInterface) {
+		async addTimer(timer: TimerInterface): Promise<TimerInterface> {
 			this.timers.push({
 				...timer,
 				id: uuidv4(),
@@ -26,6 +26,8 @@ export const useTimerStore = defineStore('timerStore', {
 			});
 
 			await this.persistStore();
+
+			return this.timers[this.timers.length - 1];
 		},
 		async updateTimer(timer: TimerInterface) {
 			const index = this.timers.findIndex(t => t.id === timer.id);
