@@ -1,7 +1,7 @@
 <template>
 	<ion-app>
 		<ion-split-pane content-id="main-content">
-			<ion-menu content-id="main-content" type="overlay" v-if="!$route.meta.noMenu" data-testid="app-menu-toggle">
+			<ion-menu content-id="main-content" type="overlay" v-if="!$route.meta.noMenu" data-testid="app-menu">
 				<ion-content>
 					<ion-list id="inbox-list">
 						<ion-list-header class="ion-margin-bottom">{{ appName }}</ion-list-header>
