@@ -9,7 +9,7 @@ import { TimerInterface } from '@stores/timerStore';
 import { TimerIntervalInterface } from '@stores/timerIntervalStore';
 
 import { IonButton, IonInput, IonRow } from '@ionic/vue';
-import { save, arrowBack, trash } from 'ionicons/icons';
+import { save, arrowBack, trash, add } from 'ionicons/icons';
 
 import { useIonRouter } from '@ionic/vue';
 import { useRoute } from 'vue-router';
@@ -78,7 +78,9 @@ function deleteTimer() {
 		return;
 	}
 
-	timerStore.removeTimer(form);
+	timerStore.removeTimer(form.id);
+	timerIntervalStore.removeForTimer(form.id);
+
 	router.push({ name: 'Home' });
 }
 
