@@ -77,4 +77,23 @@ describe('Creating a new timer', () => {
 			.should('exist')
 			.and('be.visible');
 	});
+
+	specify('If the user hits the add interval button a buncha times and then cancels and then reopens the form, we should see no intervals', () => {
+		cy.visit('/timers/create');
+
+		// add 3 intervals straight away
+		cy.ionButtonClick('[data-testid=add-interval-button]');
+		cy.ionButtonClick('[data-testid=add-interval-button]');
+		cy.ionButtonClick('[data-testid=add-interval-button]');
+
+		// cancel the form
+		cy.ionButtonClick('[data-testid=cancel-button]');
+
+		// reopen the form
+		cy.ionButtonClick('[data-testid=create-timer-button]');
+
+		// check that we have no intervals
+		cy.get('[data-testid=duration-input]')
+			.should('have.length', 0);
+	})
 });
