@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 import Card from '@components/interface/Card.vue';
+import SoundSelector from '@components/sounds/SoundSelector.vue';
 import ToggleAppMenuButton from '@components/interface/ToggleAppMenuButton.vue';
 import CreateTimerIntervalRow from '@components/timerIntervals/CreateTimerIntervalRow.vue';
 import { TimerInterface } from '@stores/timerStore';
@@ -18,6 +19,7 @@ const timerStore = useTimerStore();
 
 import { useTimerIntervalStore } from '@stores/timerIntervalStore';
 const timerIntervalStore = useTimerIntervalStore();
+
 
 const form = reactive<TimerInterface>({
 	id: '',
@@ -62,6 +64,11 @@ function validateForm() {
 		return false;
 	}
 
+	if (! form.sound) {
+		alert('Please provide a sound for the timer');
+		return false;
+	}
+
 	return true;
 }
 
@@ -87,6 +94,10 @@ const intervals = computed<TimerIntervalInterface[]>(() => {
 
 function updateInterval(interval: TimerIntervalInterface) {
 	timerIntervalStore.updateTimerInterval(interval);
+}
+
+function soundSelected(sound: string) {
+	form.sound = sound;
 }
 </script>
 
@@ -125,6 +136,19 @@ function updateInterval(interval: TimerIntervalInterface) {
 						v-model="form.start_at"
 						data-testid="timer-start-at-input"
 					/>
+					<IonInput
+						type="text"
+						label="Sound:"
+						helper-text="The sound to play when the timer goes off"
+						v-model="form.sound"
+						data-testid="timer-sound-input"
+						disabled
+					/>
+					<SoundSelector
+						:selected-sound="form.sound"
+						@sound-selected="soundSelected"
+					/>
+
 					<IonGrid>
 						<IonRow>
 							<IonCol class="ion-justify-items-end">
@@ -176,3 +200,11 @@ function updateInterval(interval: TimerIntervalInterface) {
 		</IonContent>
 	</IonPage>
 </template>
+
+<style>
+.selectedSound {
+	border: 4px solid var(--ion-color-primary);
+	border-radius: 16px;
+	padding: 3px;
+}
+</style>
