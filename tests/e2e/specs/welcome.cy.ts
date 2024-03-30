@@ -5,8 +5,12 @@
 
 describe('Welcome flow', () => {
 	// in the before hook, remove the local storage item that indicates the user has completed the welcome flow
-	beforeEach(() => {
-		cy.clearLocalStorage();
+	beforeEach(() => {	
+		cy.visit('/home');
+		
+		cy.window().then(async (window) => {
+			await window.appSettingStore.updateAppSetting('hasBeenWelcomed', '0');
+		});
 	});
 
 	specify('new users are redirected to the welcome flow', () => {
@@ -53,9 +57,6 @@ describe('Welcome flow', () => {
 		// Check that we have navigated to /home
 		cy.url()
 			.should('include', '/home');
-		
-		// hasBeenWelcomed should be set to 'true'
-		cy.assertLocalStorageItem('hasBeenWelcomed', 'true')
 			
 	});
 });

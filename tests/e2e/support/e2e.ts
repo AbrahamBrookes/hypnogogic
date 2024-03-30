@@ -21,7 +21,8 @@ import './commands'
 
 // always add the local storage 'hasBeenWelcomed' item to the local storage
 beforeEach(() => {
-	cy.window().then((window) => {
-		window.localStorage.setItem('hasBeenWelcomed', 'true');
+	cy.visit('/');
+	cy.window().then(async (window) => {
+		await window.appSettingStore.updateAppSetting('hasBeenWelcomed', '1');
 	});
 });

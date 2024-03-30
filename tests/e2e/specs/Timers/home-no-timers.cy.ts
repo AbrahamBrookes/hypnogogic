@@ -8,8 +8,8 @@ describe('Home screen with no timers', () => {
 	before(() => {	
 		cy.visit('/home');
 		
-		cy.window().then((window) => {
-			window.timerStore.clearStore();
+		cy.window().then(async (window) => {
+			await window.timerStore.clearStore();
 		});
 	});
 
