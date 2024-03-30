@@ -37,9 +37,9 @@ export const useTimerStore = defineStore('timerStore', {
 
 			await this.persistStore();
 		},
-		async removeTimer(remove: TimerInterface) {
+		async removeTimer(id: string) {
 			this.timers = this.timers.filter(timer => {
-				return timer !== remove;
+				return timer.id !== id;
 			});
 
 			await this.persistStore();
