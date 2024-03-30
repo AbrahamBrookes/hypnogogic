@@ -76,6 +76,16 @@ function validateForm() {
 		return false;
 	}
 
+	if (intervals.value.length < 1) {
+		alert('Please provide at least one interval for the timer');
+		return false;
+	}
+
+	if (intervals.value.some(interval => ! interval.duration)) {
+		alert('Please provide a duration for each interval');
+		return false;
+	}
+
 	return true;
 }
 
