@@ -72,7 +72,6 @@ router.beforeEach((to, from, next) => {
 		appSettingStore.restoreStore()
 			.then(() => {
 				const welcomed = appSettingStore.find('hasBeenWelcomed')
-				console.log('welcomed', welcomed?.value);
 				
 				if (welcomed && welcomed.value === "0") {
 					router.push({ name: 'Welcome0' })
