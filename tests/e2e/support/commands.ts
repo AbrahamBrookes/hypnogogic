@@ -41,8 +41,9 @@
  */
 Cypress.Commands.add('ionButtonClick', (selector: string) => {
 	cy.get(selector)
-	  .filter(':visible')
-	  .shadow()
-	  .find('a, button')
-	  .click({force: true});
+		.first()
+		.scrollIntoView()
+		.shadow()
+		.find('a, button')
+		.click({force: true});
 });
