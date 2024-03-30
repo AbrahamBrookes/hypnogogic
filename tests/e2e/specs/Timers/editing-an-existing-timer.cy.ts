@@ -9,7 +9,7 @@ describe('Editing an existing timer', () => {
 	before(() => {	
 		cy.visit('/home');
 		
-		cy.window().then((window) => {
+		cy.window().then(async (window) => {
 			window.timerStore.addTimer({
 				name: 'My new timer',
 				start_at: '04:36',
@@ -17,6 +17,12 @@ describe('Editing an existing timer', () => {
 			});
 
 			testTimer = window.timerStore.timers[0];
+
+			window.timerIntervalStore.addTimerInterval({
+				duration: 20,
+				timer_id: testTimer.id,
+				sound: 'bell',
+			});
 		});
 	});
 
@@ -41,6 +47,20 @@ describe('Editing an existing timer', () => {
 				.clear()
 				.type('05:36');
 			});
+		
+		// add an interval
+		cy.ionButtonClick('[data-testid=add-interval-button]');
+
+		cy.get('[data-testid=duration-input]')
+			.eq(1)
+			.should('exist')
+			.and('be.visible')
+			.within(() => {
+				cy.get('input')
+				.first()
+				.clear()
+				.type('15');
+			});
 
 		// Click the save button
 		cy.ionButtonClick('[data-testid=save-timer-button]');
@@ -58,6 +78,10 @@ describe('Editing an existing timer', () => {
 			.should('exist')
 			.and('be.visible');
 		
+		cy.contains('2 Intervals')
+			.should('exist')
+			.and('be.visible');
+		
 		// reload the page
 		cy.reload();
 
@@ -67,6 +91,10 @@ describe('Editing an existing timer', () => {
 			.and('be.visible');
 
 		cy.contains('05:36')
+			.should('exist')
+			.and('be.visible');
+		
+		cy.contains('2 Intervals')
 			.should('exist')
 			.and('be.visible');
 	});
@@ -106,6 +134,10 @@ describe('Editing an existing timer', () => {
 			.and('be.visible');
 		
 		cy.contains('06:36')
+			.should('exist')
+			.and('be.visible');
+		
+		cy.contains('2 Intervals')
 			.should('exist')
 			.and('be.visible');
 		
@@ -153,6 +185,10 @@ describe('Editing an existing timer', () => {
 		cy.contains('07:36')
 			.should('exist')
 			.and('be.visible');
+		
+		cy.contains('2 Intervals')
+			.should('exist')
+			.and('be.visible');
 	});
 
 	specify('User can cancel the edit and go back to the home screen', () => {
@@ -192,5 +228,24 @@ describe('Editing an existing timer', () => {
 		cy.contains('07:36')
 			.should('exist')
 			.and('be.visible');
+		
+		cy.contains('2 Intervals')
+			.should('exist')
+			.and('be.visible');
+	});
+
+	specify('The user can delete a timer from the edit screen', () => {
+		cy.visit('/timers/edit/' + testTimer.id);
+
+		// Click the delete button
+		cy.ionButtonClick('[data-testid=delete-timer-button]');
+
+		// Check that we have navigated to /home
+		cy.url()
+			.should('include', '/home');
+
+		// Check that the timer has been deleted
+		cy.get('[data-testid^=timer-list-item-]')
+			.should('not.exist');
 	});
 });
