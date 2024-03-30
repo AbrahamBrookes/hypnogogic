@@ -1,6 +1,35 @@
 <script setup lang="ts">
+import { IonButton, IonIcon } from '@ionic/vue';
+import { trash } from 'ionicons/icons';
+import Card from '@components/interface/Card.vue';
+
+import { Storage } from '@ionic/storage';
+const store = new Storage();
+
+import { useIonRouter } from '@ionic/vue';
+const router = useIonRouter();
+
 import { useTimerStore } from '@stores/timerStore';
 const timerStore = useTimerStore();
+
+import { useTimerIntervalStore } from '@/stores/timerIntervalStore';
+const timerIntervalStore = useTimerIntervalStore();
+
+function expungeData() {
+	if (!confirm('Are you sure you want to expunge all data? This action cannot be undone.')) {
+		return;
+	}
+
+	timerStore.clearStore();
+	timerIntervalStore.clearStore();
+
+	store.create()
+		.then(() => {
+			return store.clear();
+		})
+	
+	localStorage.clear();
+}
 </script>
 
 <template>
@@ -21,8 +50,22 @@ const timerStore = useTimerStore();
 		  </IonToolbar>
 		</IonHeader>
   
-		<div id="container ion-align-items-start">
-			asd
+		<div class="ion-padding">
+			<Card
+				title="Data"
+				subtitle="Expunge all data"
+			>
+				<p>
+					<strong>Warning:</strong> This will remove all data from the app. This action cannot be undone.
+				</p>
+				<IonButton
+					@click="expungeData"
+					color="danger"
+					class="ion-float-right ion-margin-vertical"
+				>
+					<IonIcon :icon="trash" class="ion-margin-end"></IonIcon> Clear all data
+				</IonButton>
+			</Card>
 		</div>
 	  </IonContent>
 	</IonPage>
