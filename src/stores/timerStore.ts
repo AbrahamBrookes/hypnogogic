@@ -19,8 +19,6 @@ export const useTimerStore = defineStore('timerStore', {
 	}),
 	actions: {
 		async addTimer(timer: TimerInterface) {
-			console.log('Adding timer', timer);
-			
 			this.timers.push({
 				...timer,
 				id: uuidv4(),

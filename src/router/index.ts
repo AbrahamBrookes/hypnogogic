@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 
+import { useAppSettingStore } from '@stores/appSettingStore';
+
 const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/welcome-0',
@@ -63,13 +65,19 @@ const router = createRouter({
 
 // set up our router guards
 router.beforeEach((to, from, next) => {
-	// if the localstorage item hasBeenWelcomed is not set, redirect to the welcome flow
-	if (
-		!localStorage.getItem('hasBeenWelcomed') &&
-		!['Welcome0', 'Welcome1', 'Welcome2'].includes(to.name)
-	){
-		next('/welcome-0');
-		return;
+	// if hasBeenWelcomed is not set, redirect to the welcome flow
+	if (!['Welcome0', 'Welcome1', 'Welcome2'].includes(to.name)) {
+		
+		const appSettingStore = useAppSettingStore();
+		appSettingStore.restoreStore()
+			.then(() => {
+				const welcomed = appSettingStore.find('hasBeenWelcomed')
+				console.log('welcomed', welcomed?.value);
+				
+				if (welcomed && welcomed.value === "0") {
+					router.push({ name: 'Welcome0' })
+				}
+			})
 	}
 
 	next();

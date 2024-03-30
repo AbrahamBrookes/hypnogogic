@@ -41,8 +41,6 @@ onIonViewDidEnter(() => {
 })
 
 function saveTimer() {
-	console.log(timerStore.find(timerId), form);
-	
 	if (! validateForm()) {
 		return;
 	}
