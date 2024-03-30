@@ -20,7 +20,7 @@ import './commands'
 // require('./commands')
 
 // always add the local storage 'hasBeenWelcomed' item to the local storage
-beforeEach(() => {
+before(() => {
 	cy.visit('/');
 	cy.window().then(async (window) => {
 		await window.appSettingStore.updateAppSetting('hasBeenWelcomed', '1');
