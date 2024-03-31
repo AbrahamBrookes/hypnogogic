@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-	'sound-selected': (sound: SoundInterface) => void;
+	(event: 'sound-selected', sound: SoundInterface): void;
 }>();
 
 
@@ -47,7 +47,7 @@ function soundSelected(sound: SoundInterface) {
 				<IonLabel>Preview:</IonLabel>
 				<audio
 					ref="audioPlayer"
-					:src="selectedSound.src"
+					:src="'sounds/' + selectedSound.src"
 					controls
 					class="w-100"
 				/>
