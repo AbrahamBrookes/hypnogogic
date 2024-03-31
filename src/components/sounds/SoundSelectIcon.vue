@@ -18,3 +18,11 @@ const props = defineProps<{
 		:data-testid="'sound-select-icon-' + sound.id"
 	/>
 </template>
+
+<style>
+.selectedSound {
+	border: 4px solid var(--ion-color-primary);
+	border-radius: 16px;
+	padding: 3px;
+}
+</style>

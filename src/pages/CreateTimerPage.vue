@@ -206,11 +206,3 @@ function soundSelected(sound: SoundInterface) {
 		</IonContent>
 	</IonPage>
 </template>
-
-<style>
-.selectedSound {
-	border: 4px solid var(--ion-color-primary);
-	border-radius: 16px;
-	padding: 3px;
-}
-</style>
