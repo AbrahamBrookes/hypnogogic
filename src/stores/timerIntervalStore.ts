@@ -2,11 +2,8 @@ import { defineStore } from 'pinia';
 import { Storage } from '@ionic/storage';
 import { v4 as uuidv4 } from 'uuid';
 import { TimerInterface, useTimerStore } from './timerStore';
-import {
-	LocalNotificationDescriptor,
-	LocalNotifications,
-	ScheduleResult
-} from '@capacitor/local-notifications';
+import { LocalNotificationDescriptor, ScheduleResult } from '@capacitor/local-notifications';
+import { useSoundStore } from './soundStore';
 
 // TimerInterval is the subsequent alerts that are played after the initial timerInterval
 export interface TimerIntervalInterface {
@@ -71,30 +68,22 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 		
 		// given a timer id, schedule all the notifications for the timerIntervals
 		scheduleNotificationsForTimer(timer_id: string) {
+			const soundStore = useSoundStore();
 			const timerStore = useTimerStore();
+			const timer = timerStore.find(timer_id);
+			if (!timer) {
+				throw 'Cannot find timer to schedule notifications for';
+			}
+
 			const timerIntervals = this.getForTimer(timer_id);
 
 			timerIntervals.forEach(async (timerInterval: TimerIntervalInterface) => {
-				const index = this.timerIntervals.findIndex(t => t.id === timerInterval.id);
-
 				const targetTime = this.startTime(timerInterval);
 
-				LocalNotifications.schedule({
-					notifications: [
-						{
-							title: 'Hypnogogic',
-							body: 'Timer interval alert',
-							id: index + timerStore.timers.length + 1,
-							schedule: { 
-								at: targetTime,
-								allowWhileIdle: true,
-							},
-							channelId: timerInterval.timer_id,
-						}
-					]
-				})
+				soundStore.scheduleNotification(timer.sound, targetTime)
 				.then((result: ScheduleResult) => {
-					this.timerIntervals[index].notification = result.notifications[0];
+					timerInterval.notification = result.notifications[0];
+					this.updateTimerInterval(timerInterval);
 				})
 				.catch((e) => {
 					alert('Failed to schedule notification: ' + e.message);
@@ -107,25 +96,27 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 
 		// given a timer id, cancel all the notifications for the timerIntervals
 		async cancelNotificationsForTimer(timer_id: string) {
+			const soundStore = useSoundStore();
 			const timerStore = useTimerStore();
 			const timerIntervals = this.getForTimer(timer_id);
+			const timer = timerStore.find(timer_id);
+			if (!timer) {
+				throw 'Cannot find timer to cancel notifications for';
+			}
 
 			timerIntervals.forEach(async (timerInterval: TimerIntervalInterface) => {
-				const index = this.timerIntervals.findIndex(t => t.timer_id === timer_id);
-
 				if (timerInterval.notification) {
-					await LocalNotifications.cancel({
-						notifications: [timerInterval.notification]
-					}).catch((e) => {
+					await soundStore.cancelNotification(timerInterval.notification)
+					.catch((e) => {
 						alert('Failed to cancel notification: ' + e.message);
 						throw 'Failed to cancel notification: ' + e.message;
 					});
 
-					this.timerIntervals[index].notification = undefined;
+					timerInterval.notification = undefined;
 				}
-
-				this.persistStore();
 			});
+
+			await this.persistStore();
 		},
 
 		// persist the store to the device

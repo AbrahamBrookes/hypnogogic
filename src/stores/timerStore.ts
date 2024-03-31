@@ -1,13 +1,9 @@
 import { defineStore } from 'pinia';
 import { Storage } from '@ionic/storage';
 import { v4 as uuidv4 } from 'uuid';
-import { SoundInterface } from '@stores/soundStore';
+import { SoundInterface, useSoundStore } from '@stores/soundStore';
 import { useTimerIntervalStore } from '@stores/timerIntervalStore';
-import {
-	LocalNotificationDescriptor,
-	LocalNotifications,
-	ScheduleResult
-} from '@capacitor/local-notifications';
+import { LocalNotificationDescriptor, ScheduleResult } from '@capacitor/local-notifications';
 import { DateTime } from 'luxon';
 
 // the Timer is the main object we are storing in the store
@@ -74,23 +70,13 @@ export const useTimerStore = defineStore('timerStore', {
 
 			let selectedTimer = this.timers[index];
 			selectedTimer.enabled = enabled;
-			
-			if(enabled) {
-				LocalNotifications.requestPermissions();
-			}
 
-			// if no channel, create one
-			checkAndCreateNotificationChannel(selectedTimer);
+			const soundStore = useSoundStore();
+			const timerIntervalStore = useTimerIntervalStore();
 
 			// if the timer is disabled, cancel the notification
 			if (!enabled && selectedTimer.notification) {
-				await LocalNotifications.cancel({
-					notifications: [selectedTimer.notification]
-				}).catch((e) => {
-					alert('Failed to cancel notification: ' + e.message);
-				});
-
-				const timerIntervalStore = useTimerIntervalStore();
+				await soundStore.cancelNotification(selectedTimer.notification);
 				await timerIntervalStore.cancelNotificationsForTimer(selectedTimer.id);
 
 				selectedTimer.notification = undefined;
@@ -101,27 +87,13 @@ export const useTimerStore = defineStore('timerStore', {
 				const targetTime = this.startTime(selectedTimer);
 
 				// schedule the notification
-				LocalNotifications.schedule({
-					notifications: [
-						{
-							title: 'Hypnogogic alert',
-							body: 'Playing ' + selectedTimer.sound.name,
-							id: index,
-							schedule: { 
-								at: targetTime,
-								allowWhileIdle: true,
-							},
-							channelId: selectedTimer.id,
-						}
-					]
-				})
+				soundStore.scheduleNotification(selectedTimer.sound, targetTime)
 				.then((result: ScheduleResult) => {
 					// save the notification to the timer so we can cancel it later
 					this.timers[index].notification = result.notifications[0];
 				})
 				.then(() => {
 					// schedule the timer intervals
-					const timerIntervalStore = useTimerIntervalStore();
 					timerIntervalStore.scheduleNotificationsForTimer(selectedTimer.id);
 				})
 				.catch((e) => {
@@ -176,27 +148,3 @@ export const useTimerStore = defineStore('timerStore', {
 		}
 	}
 });
-
-// check if the notification channel exists, and create it if it doesn't
-function checkAndCreateNotificationChannel(timer: TimerInterface) {
-	LocalNotifications.listChannels().then((channels) => {
-		let channel = channels.channels.find((channel) => channel.id === timer.id);
-
-		if (!channel) {
-			LocalNotifications.createChannel({
-				id: timer.id,
-				name: timer.name,
-				description: 'Hypnogogic alarm channel',
-				importance: 5,
-				sound: timer.sound.src,
-				vibration: false
-			}).catch((e) => {
-				alert('Failed to create channel: ' + e.message);
-				throw 'Failed to create channel: ' + e.message;
-			});
-		}
-	}).catch((e) => {
-		alert('Failed to list channels: ' + e.message);
-		throw 'Failed to list channels: ' + e.message;
-	})
-}
