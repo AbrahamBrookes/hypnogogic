@@ -54,6 +54,7 @@ const timerIntervals = computed(() => {
 						:src="'sounds/' + timer.sound.src"
 						class="sound-player"
 					></audio>
+					{{ timer.sound.src }}
 				</IonCol>
 			</IonRow>
 			<IonRow class="ion-justify-content-end">
