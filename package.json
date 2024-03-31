@@ -10,8 +10,9 @@
     "test:e2e": "cypress open",
     "test:unit": "vitest",
     "lint": "eslint .",
-    "android": "cap copy && npm run copy:sounds && ionic capacitor sync && cap run android",
-    "copy:sounds": "xcopy src\\assets\\sounds\\* android\\app\\src\\main\\res\\raw /E /I /Y"
+    "android": "cap copy && npm run copy:sounds && npm run copy:icons && ionic capacitor sync && cap run android",
+    "copy:sounds": "xcopy src\\assets\\sounds\\* android\\app\\src\\main\\res\\raw /E /I /Y",
+    "copy:icons": "xcopy src\\assets\\sound_icons\\* android\\app\\src\\main\\res\\raw /E /I /Y"
   },
   "dependencies": {
     "@capacitor/android": "^5.7.4",
