@@ -85,7 +85,10 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 							title: 'Hypnogogic',
 							body: 'Timer interval alert',
 							id: index + timerStore.timers.length + 1,
-							schedule: { at: targetTime },
+							schedule: { 
+								at: targetTime,
+								allowWhileIdle: true,
+							},
 							channelId: timerInterval.timer_id,
 						}
 					]

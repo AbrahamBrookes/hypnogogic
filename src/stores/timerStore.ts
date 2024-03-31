@@ -107,7 +107,10 @@ export const useTimerStore = defineStore('timerStore', {
 							title: 'Hypnogogic alert',
 							body: 'Playing ' + selectedTimer.sound.name,
 							id: index,
-							schedule: { at: targetTime },
+							schedule: { 
+								at: targetTime,
+								allowWhileIdle: true,
+							},
 							channelId: selectedTimer.id,
 						}
 					]
