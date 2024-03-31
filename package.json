@@ -9,7 +9,9 @@
     "preview": "vite preview",
     "test:e2e": "cypress open",
     "test:unit": "vitest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "android": "cap copy && npm run copy:sounds && ionic capacitor sync && cap run android",
+    "copy:sounds": "xcopy src\\assets\\sounds\\* android\\app\\src\\main\\res\\raw /E /I /Y"
   },
   "dependencies": {
     "@capacitor/android": "^5.7.4",
