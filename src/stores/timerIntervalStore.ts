@@ -75,7 +75,7 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 			const timerIntervals = this.getForTimer(timer_id);
 
 			timerIntervals.forEach(async (timerInterval: TimerIntervalInterface) => {
-				const index = this.timerIntervals.findIndex(t => t.timer_id === timer_id);
+				const index = this.timerIntervals.findIndex(t => t.id === timerInterval.id);
 
 				const targetTime = this.startTime(timerInterval);
 
