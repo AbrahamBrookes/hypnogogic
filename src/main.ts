@@ -73,6 +73,9 @@ timerIntervalStore.restoreStore();
 import { useAppSettingStore } from '@stores/appSettingStore';
 const appSettingStore = useAppSettingStore();
 appSettingStore.restoreStore();
+import { useSoundStore } from '@stores/soundStore';
+const soundStore = useSoundStore();
+soundStore.restoreStore();
 
 // stuff we want to do just for cypress's sake
 if (window.Cypress) {
@@ -80,4 +83,5 @@ if (window.Cypress) {
 	window.timerStore = timerStore
 	window.timerIntervalStore = timerIntervalStore
 	window.appSettingStore = appSettingStore
+	window.soundStore = soundStore
 }
