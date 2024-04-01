@@ -9,17 +9,25 @@ export interface AppSettingInterface {
 	value: string;
 }
 
+// our app settings and their default values
+export const defaultAppSettings: AppSettingInterface[] = [
+	{
+		id: uuidv4(),
+		name: 'hasBeenWelcomed',
+		value: '0',
+	},
+	{
+		id: uuidv4(),
+		name: 'hasClosedBatteryOptimizationDialogue',
+		value: '0',
+	}
+];
+
 export const useAppSettingStore = defineStore('appSettingStore', {
 	state: () => ({
 		loading: false,
 		saving: false,
-		appSettings: [
-			{
-				id: uuidv4(),
-				name: 'hasBeenWelcomed',
-				value: '0',
-			}
-		] as AppSettingInterface[],
+		appSettings: defaultAppSettings,
 	}),
 	actions: {
 		async updateAppSetting(name: string, value: string) {
@@ -36,9 +44,13 @@ export const useAppSettingStore = defineStore('appSettingStore', {
 
 			await this.persistStore();
 		},
-		find(id: string): AppSettingInterface | undefined {
-			return this.appSettings.find(t => t.id === id) ||
+		find(id: string): AppSettingInterface {
+			const setting = this.appSettings.find(t => t.id === id) ||
 				this.appSettings.find(t => t.name === id);
+			if (!setting) {
+				throw new Error(`AppSetting ${id} not found`);
+			}
+			return setting;
 		},
 		async persistStore() {
 			this.saving = true;
@@ -56,6 +68,14 @@ export const useAppSettingStore = defineStore('appSettingStore', {
 			if (serialized) {
 				this.appSettings = JSON.parse(serialized);
 			}
+			// if we have any settings that are not in the store, add them
+			defaultAppSettings.forEach((setting: AppSettingInterface) => {
+				const index = this.appSettings.findIndex(t => t.name === setting.name);
+				if (index < 0) {
+					this.appSettings.push(setting);
+				}
+			});
+			
 			this.loading = false;
 		},
 		async clearStore() {
