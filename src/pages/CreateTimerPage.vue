@@ -174,6 +174,7 @@ function soundSelected(sound: SoundInterface) {
 							:key="interval.id"
 							:timer-interval="interval"
 							@update="updateInterval"
+							@remove="timerIntervalStore.removeTimerInterval(interval)"
 						/>
 					</IonGrid>
 				</Card>
