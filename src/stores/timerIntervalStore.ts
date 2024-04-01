@@ -76,6 +76,13 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 		// given a timer id, remove all the timerIntervals for that timer
 		removeForTimer(timer_id: string): TimerIntervalInterface[] {
 			this.timerIntervals = this.timerIntervals.filter(t => t.timer_id !== timer_id);
+			
+			// recaclulate the indexes
+			const timerIntervals = this.getForTimer(timer_id);
+			timerIntervals.forEach((timerInterval, index) => {
+				timerInterval.index = index;
+			});
+
 			return this.timerIntervals;
 		},
 		
