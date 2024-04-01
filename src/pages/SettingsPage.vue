@@ -2,6 +2,7 @@
 import { IonButton, IonIcon } from '@ionic/vue';
 import { trash } from 'ionicons/icons';
 import Card from '@components/interface/Card.vue';
+import BatteryOptimizationDialogue from '@/components/interface/BatteryOptimizationDialogue.vue';
 
 import { Storage } from '@ionic/storage';
 const store = new Storage();
@@ -49,6 +50,11 @@ function expungeData() {
 			<IonTitle size="large">Settings</IonTitle>
 		  </IonToolbar>
 		</IonHeader>
+		
+		<BatteryOptimizationDialogue
+			class="ion-margin-top ion-margin-horizontal"
+			:show="true"
+		/>
   
 		<div class="ion-padding">
 			<Card

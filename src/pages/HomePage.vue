@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TimerList from '@components/timers/TimerList.vue';
 import ToggleAppMenuButton from '@components/interface/ToggleAppMenuButton.vue';
+import BatteryOptimizationDialogue from '@/components/interface/BatteryOptimizationDialogue.vue';
 
 import { useTimerStore } from '@stores/timerStore';
 const timerStore = useTimerStore();
@@ -25,6 +26,10 @@ const timerStore = useTimerStore();
 		</IonHeader>
   
 		<div id="container ion-align-items-start">
+		  <BatteryOptimizationDialogue
+		    class="ion-margin-top ion-margin-horizontal"
+		  />
+
 		  <TimerList
 		    :timers="timerStore.timers"
 		  >
