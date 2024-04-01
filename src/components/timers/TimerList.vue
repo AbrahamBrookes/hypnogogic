@@ -17,7 +17,7 @@ const props = defineProps<{
 
 <template>
 	<div
-		class="ion-padding-horizontal ion-margin-horizontal"
+		class="ion-margin-horizontal"
 		data-testid="timer-list"
 	>
 		<h1>Timers</h1>
