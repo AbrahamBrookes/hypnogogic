@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia';
 import { Storage } from '@ionic/storage';
 import { v4 as uuidv4 } from 'uuid';
-import { TimerInterface, useTimerStore } from './timerStore';
+import { useTimerStore } from '@stores/timerStore';
 import { LocalNotificationDescriptor, ScheduleResult } from '@capacitor/local-notifications';
-import { useSoundStore } from './soundStore';
+import { useSoundStore } from '@stores/soundStore';
+import { DateTime } from 'luxon';
 
 // TimerInterval is the subsequent alerts that are played after the initial timerInterval
 export interface TimerIntervalInterface {
 	id: string;
+	index: number; // the order of the timerInterval in the sequence
 	timer_id: string;
 	duration: number|null;
 	sound: string;
@@ -23,6 +25,17 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 	actions: {
 		// given a timerInterval object, add it to the store
 		async addTimerInterval(timerInterval: TimerIntervalInterface) {
+			// we need to calculate the index of the timerInterval
+			const timerIntervals = this.getForTimer(timerInterval.timer_id);
+
+			// if there are no timerIntervals, this is the first one
+			if (timerIntervals.length === 0) {
+				timerInterval.index = 0;
+			} else {
+				// otherwise, this is the last one
+				timerInterval.index = timerIntervals[timerIntervals.length - 1].index + 1;
+			}
+
 			this.timerIntervals.push({
 				...timerInterval,
 				id: uuidv4(),
@@ -67,7 +80,7 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 		},
 		
 		// given a timer id, schedule all the notifications for the timerIntervals
-		scheduleNotificationsForTimer(timer_id: string) {
+		async scheduleNotificationsForTimer(timer_id: string) {
 			const soundStore = useSoundStore();
 			const timerStore = useTimerStore();
 			const timer = timerStore.find(timer_id);
@@ -77,10 +90,10 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 
 			const timerIntervals = this.getForTimer(timer_id);
 
-			timerIntervals.forEach(async (timerInterval: TimerIntervalInterface) => {
-				const targetTime = this.startTime(timerInterval);
+			for (const timerInterval of timerIntervals) {
+				const targetTime = this.startTime(timerInterval, timerStore.startTime(timer));
 
-				soundStore.scheduleNotification(timer.sound, targetTime)
+				await soundStore.scheduleNotification(timer.sound, targetTime)
 				.then((result: ScheduleResult) => {
 					timerInterval.notification = result.notifications[0];
 					this.updateTimerInterval(timerInterval);
@@ -89,7 +102,7 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 					alert('Failed to schedule notification: ' + e.message);
 					throw 'Failed to schedule notification: ' + e.message;
 				});
-			});
+			}
 
 			this.persistStore();
 		},
@@ -149,21 +162,20 @@ export const useTimerIntervalStore = defineStore('timerIntervalStore', {
 
 	getters: {
 		// given a timerInterval object, calculate the time when the notification should be scheduled
-		startTime: (state) => (timerInterval: TimerIntervalInterface): Date => {
-			const timerStore = useTimerStore();
-			const timer: TimerInterface | undefined = timerStore.find(timerInterval.timer_id);
-			if (!timer) {
-				throw 'Timer not found';
-			}
-		
-			const targetTime = timerStore.startTime(timer);
-			if (timerInterval.duration) {
-				targetTime.setMinutes(targetTime.getMinutes() + timerInterval.duration);
+		startTime: (state) => (timerInterval: TimerIntervalInterface, start_time: Date): Date => {
 
-				return targetTime;
+			// get all the timerIntervals for the timer up until this one
+			const timerIntervals = state.timerIntervals
+				.filter(t => t.timer_id === timerInterval.timer_id && t.index <= timerInterval.index)
+				.sort((a, b) => a.index - b.index);
+
+			for (const interval of timerIntervals) {
+				if (interval.duration) {
+					start_time = DateTime.fromJSDate(start_time).plus({ minutes: interval.duration }).toJSDate();
+				}
 			}
 
-			throw 'Could not calculate start time for timerInterval';
+			return start_time;
 		}
 	}
 });

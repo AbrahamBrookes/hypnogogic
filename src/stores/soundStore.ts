@@ -118,8 +118,8 @@ export const useSoundStore = defineStore('soundStore', {
 		},
 
 		// schedule a notification for a sound
-		async scheduleNotification(sound: SoundInterface, date: Date): Promise<ScheduleResult> {
-			return await LocalNotifications.schedule({
+		scheduleNotification(sound: SoundInterface, date: Date): Promise<ScheduleResult> {
+			return LocalNotifications.schedule({
 				notifications: [
 					{
 						title: 'Hypnogogic alert',
@@ -137,7 +137,6 @@ export const useSoundStore = defineStore('soundStore', {
 			})
 			.then((result: ScheduleResult) => {
 				this.notifications.push(result.notifications[0]);
-				alert('Notification scheduled: ' + JSON.stringify(result));
 				return result;
 			})
 			.catch((e) => {
