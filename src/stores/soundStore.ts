@@ -225,7 +225,17 @@ export const useSoundStore = defineStore('soundStore', {
 			this.sounds = [];
 			await this.persistStore();
 		}
+	},
+
+	getters: {
+		// just the user uploaded sounds
+		userSounds(): SoundInterface[] {
+			return this.sounds.filter(sound => {
+				return !this.stockSounds.some(stockSound => stockSound.id === sound.id);
+			})
+		}
 	}
+
 });
 
 // check if the notification channel exists, and create it if it doesn't
