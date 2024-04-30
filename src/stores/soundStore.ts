@@ -106,6 +106,8 @@ export const useSoundStore = defineStore('soundStore', {
 				id: sound.id || uuidv4(),
 			});
 
+			sound = this.sounds[this.sounds.length - 1];
+
 			// request permissions to schedule notifications
 			LocalNotifications.requestPermissions();
 			
@@ -114,7 +116,7 @@ export const useSoundStore = defineStore('soundStore', {
 
 			await this.persistStore();
 
-			return this.sounds[this.sounds.length - 1];
+			return sound;
 		},
 
 		// schedule a notification for a sound
