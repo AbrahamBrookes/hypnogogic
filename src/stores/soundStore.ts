@@ -8,7 +8,7 @@ import {
 } from '@capacitor/local-notifications';
 
 export interface SoundInterface {
-	id: string;
+	id?: string;
 	name: string;
 	icon: string;
 	src: string;
