@@ -6,6 +6,7 @@ import {
 	LocalNotifications,
 	ScheduleResult
 } from '@capacitor/local-notifications';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 export interface SoundInterface {
 	id?: string;
@@ -215,6 +216,30 @@ export const useSoundStore = defineStore('soundStore', {
 				// load the user sounds
 				data.sounds.forEach((sound: SoundInterface) => {
 					this.addSound(sound);
+
+					// check that the sound exists on the filesystem
+					Filesystem.stat({
+						path: sound.src,
+						directory: Directory.Data
+					}).catch(async (e) => {
+						// if the file doesn't exist, copy it from resources
+						await FileSystem.readFile({
+							path: 'sounds/' + sound.src
+						}).then(async (fileData) => {
+						
+							await Filesystem.writeFile({
+								path: 'sounds/afra.mp3', // Adjust the path as needed
+								data: fileData,
+								directory: Directory.Data
+							}).catch((e) => {
+								alert('Failed to copy sound: ' + e.message);
+								throw 'Failed to copy sound: ' + e.message;
+							});
+						}).catch((e) => {
+							alert('Failed to read sound: ' + e.message);
+							throw 'Failed to read sound: ' + e.message;
+						});
+					});
 				});
 			}
 			this.loading = false;

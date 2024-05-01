@@ -1,56 +1,60 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { Filesystem, Directory } from '@capacitor/filesystem';
+import { SoundInterface, useSoundStore } from '@stores/soundStore';
+const soundStore = useSoundStore();
 
 const file = ref<File | null>(null);
 
-async function fileChanged(event: Event) {
-	const target = event.target as HTMLInputElement;
-	const file = target.files?.[0];
-	if (!file) {
+function fileChanged(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+
+    if (!file || file.type !== "audio/mpeg") {  // Confirm it's an MP3 file
+		alert('Only MP3 files are supported.');
 		return;
 	}
 
-	const reader = new FileReader();
-	reader.onloadend = (e) => {
-		const result = e.target?.result;
-		console.log(result);
-	};
-	reader.readAsDataURL(file);
-
-	// save the file to res/raw and assets/public/sounds
-	
-	// convert the file to base64
-	const base64Data: string = await convertBlobToBase64(file) as string;
-
-	// save the base64 to res/raw
-	const resRawPath: string = 'src/main/res/raw/';
-	const path: string = resRawPath + file.name;
-	const savedFile = await Filesystem.writeFile({
-		path: path,
-		data: base64Data,
-		directory: Directory.Data,
-	});
-
-	
+	saveSoundFile(file, file.name);
 }
 
-const convertBlobToBase64 = (blob: Blob) =>
-  new Promise((resolve, reject) => {
+async function saveSoundFile(file: Blob, fileName: string) {
     const reader = new FileReader();
-    reader.onerror = reject;
-    reader.onload = () => {
-      resolve(reader.result);
+    reader.onloadend = async () => {
+        const base64 = reader.result as string;
+        const base64Data = base64.split(',')[1];
+
+        try {
+            await Filesystem.writeFile({
+                path: fileName,
+                data: base64Data,
+                directory: Directory.Data
+            });
+
+            // store the sound in our sound store
+            const sound: SoundInterface = {
+                name: 'User Sound',
+                src: fileName,
+                icon: '/sound_icons/helios.png',
+            };
+
+            soundStore.addSound(sound);
+        } catch (error) {
+            alert('Error saving file: ' + error.message);
+        }
     };
-    reader.readAsDataURL(blob);
-  });
+    reader.onerror = () => {
+        alert('File could not be read.');
+    };
+    reader.readAsDataURL(file);
+}
 </script>
 
 <template>
-	<div
-		data-testid="upload-sound"
-	>
-		<IonLabel>Upload a sound</IonLabel>
-  		<input type="file" name="photo" @change="fileChanged" />
+	<div data-testid="upload-sound">
+  		<input
+			type="file"
+			name="sound"
+			@change="fileChanged"
+		/>
 	</div>
 </template>

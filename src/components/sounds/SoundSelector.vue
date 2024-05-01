@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import SoundSelectIcon from '@components/sounds/SoundSelectIcon.vue';
+import UploadSound from '@components/sounds/UploadSound.vue';
+import SoundPlayer from '@components/sounds/SoundPlayer.vue';
+
 import { ref, computed } from 'vue';
 import { useSoundStore, SoundInterface } from '@stores/soundStore';
+import { IonHeader, IonLabel } from '@ionic/vue';
 const soundStore = useSoundStore();
 
 const props = defineProps<{
@@ -13,10 +17,18 @@ const emit = defineEmits<{
 }>();
 
 
-const chunkedSounds = computed(() => {
+const chunkedStockSounds = computed(() => {
 	const rows = [];
 	for (let i = 0; i < soundStore.stockSounds.length; i += 4) {
 		rows.push(soundStore.stockSounds.slice(i, i + 4));
+	}
+	return rows;
+});
+
+const chunkedUserSounds = computed(() => {
+	const rows = [];
+	for (let i = 0; i < soundStore.userSounds.length; i += 4) {
+		rows.push(soundStore.userSounds.slice(i, i + 4));
 	}
 	return rows;
 });
@@ -33,7 +45,25 @@ function soundSelected(sound: SoundInterface) {
 				<IonLabel>Select a sound:</IonLabel>
 			</IonCol>
 		</IonRow>
-		<IonRow v-for="(row, rowIndex) in chunkedSounds" :key="`row-${rowIndex}`">
+		<IonRow v-for="(row, rowIndex) in chunkedStockSounds" :key="`row-${rowIndex}`">
+			<IonCol v-for="(item, colIndex) in row" :key="`col-${rowIndex}-${colIndex}`">
+				<SoundSelectIcon
+					:sound="item"
+					:selected-sound="selectedSound"
+					@select="soundSelected"
+				/>
+			</IonCol>
+		</IonRow>
+		<IonHeader>
+			<IonLabel>Or</IonLabel>
+		</IonHeader>
+		<IonRow>
+			<IonCol>
+				<IonLabel>Upload a sound:</IonLabel>
+			</IonCol>
+		</IonRow>
+		<UploadSound />
+		<IonRow v-for="(row, rowIndex) in chunkedUserSounds" :key="`row-${rowIndex}`">
 			<IonCol v-for="(item, colIndex) in row" :key="`col-${rowIndex}-${colIndex}`">
 				<SoundSelectIcon
 					:sound="item"
@@ -45,12 +75,7 @@ function soundSelected(sound: SoundInterface) {
 		<IonRow class="ion-margin-top">
 			<IonCol>
 				<IonLabel>Preview:</IonLabel>
-				<audio
-					ref="audioPlayer"
-					:src="'sounds/' + selectedSound.src"
-					controls
-					class="w-100"
-				/>
+				<SoundPlayer :sound="selectedSound" />
 			</IonCol>
 		</IonRow>
 	</IonGrid>	
