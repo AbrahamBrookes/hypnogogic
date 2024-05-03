@@ -7,7 +7,7 @@ export default defineConfig({
     videosFolder: 'tests/e2e/videos',
     screenshotsFolder: 'tests/e2e/screenshots',
     baseUrl: 'http://localhost:8100',
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    experimentalRunAllSpecs: true,
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
