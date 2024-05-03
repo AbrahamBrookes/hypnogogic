@@ -57,8 +57,8 @@ import {
 } from '@ionic/vue';
 import { ref } from 'vue';
 import {
-	journalOutline,
-	journalSharp,
+	bookOutline,
+	bookSharp,
 	moonOutline,
 	moonSharp,
 	settingsOutline,
@@ -74,10 +74,10 @@ const appPages = [
 		mdIcon: moonSharp,
 	},
 	{
-		title: 'Diary',
-		url: '/diary',
-		iosIcon: journalOutline,
-		mdIcon: journalSharp,
+		title: 'Resources',
+		url: '/resources',
+		iosIcon: bookOutline,
+		mdIcon: bookSharp,
 	},
 	{
 		title: 'Settings',
