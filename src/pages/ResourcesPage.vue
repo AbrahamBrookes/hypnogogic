@@ -5,7 +5,7 @@ import Card from '@components/interface/Card.vue';
 </script>
 
 <template>
-	<IonPage data-testid="settings-page">
+	<IonPage data-testid="resources-page">
 	  <IonHeader :translucent="true">
 		<IonToolbar>
 		  <IonButtons slot="start">
@@ -22,14 +22,22 @@ import Card from '@components/interface/Card.vue';
 		  </IonToolbar>
 		</IonHeader>
 		
-  
 		<div class="ion-padding">
+			<Card
+				title="Online communities"
+				subtitle="Other people do this stuff too"
+			>
+				<p>
+					<a href="https://www.reddit.com/r/AstralProjection/">Astral Projection Reddit</a>
+				</p>
+			</Card>
+			
 			<Card
 				title="Binaural Beats"
 				subtitle="Freely available on YouTube"
 			>
 				<p>
-					These are three binaural beat tracks that I have personally used to acheive out of body experiences.
+					These are three binaural beat tracks that I have personally used to achieve out of body experiences.
 					Use stereo headphones that are comfortable to sleep in like galaxy buds or airpods. Use breathing
 					techniques, relax your body and observe the movements of your mind. You may experience vibrations,
 					auditory hallucinations, and other sensations. If you feel fear, you are on the right track. Don't
