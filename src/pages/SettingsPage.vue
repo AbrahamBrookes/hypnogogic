@@ -73,6 +73,23 @@ function expungeData() {
 				</IonButton>
 			</Card>
 		</div>
+  
+		<div class="ion-padding">
+			<Card
+				title="Credits"
+				subtitle="Credits and attributions"
+			>
+				<p>
+					This app uses the following sounds from Freesound.org:
+				</p>
+				<ul>
+					<li><a href="https://freesound.org/people/Incarnadine/sounds/29957/" target="_blank" rel="noopener noreferrer">Pipe bell by Incarnadine</a></li>
+					<li><a href="https://freesound.org/people/patchen/sounds/4103/" target="_blank" rel="noopener noreferrer">ATIK 2 by Patchen</a></li>
+					<li><a href="https://freesound.org/people/arnaud%20coutancier/sounds/464332/" target="_blank" rel="noopener noreferrer">Monks' prayers by Arnaud Coutancier</a></li>
+					<li><a href="https://freesound.org/people/Adrian_Gomar/sounds/197288/" target="_blank" rel="noopener noreferrer">buddhist_monks_prayer_2 by Adrian_Gomar</a></li>
+				</ul>
+			</Card>
+		</div>
 	  </IonContent>
 	</IonPage>
 </template>
