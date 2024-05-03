@@ -87,6 +87,8 @@ function expungeData() {
 					<li><a href="https://freesound.org/people/patchen/sounds/4103/" target="_blank" rel="noopener noreferrer">ATIK 2 by Patchen</a></li>
 					<li><a href="https://freesound.org/people/arnaud%20coutancier/sounds/464332/" target="_blank" rel="noopener noreferrer">Monks' prayers by Arnaud Coutancier</a></li>
 					<li><a href="https://freesound.org/people/Adrian_Gomar/sounds/197288/" target="_blank" rel="noopener noreferrer">buddhist_monks_prayer_2 by Adrian_Gomar</a></li>
+					<li><a href="https://freesound.org/people/beninu/sounds/522343/" target="_blank" rel="noopener noreferrer">Bird Song Garden - Early Morning In Suburbs by beninu</a></li>
+					<li><a href="https://freesound.org/people/szegvari/sounds/590053/" target="_blank" rel="noopener noreferrer">Morning silent forest - atmo orchestral by szegvari</a></li>
 				</ul>
 			</Card>
 		</div>
