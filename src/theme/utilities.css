@@ -5,3 +5,8 @@
 .w-100 {
 	width: 100%;
 }
+
+h5 {
+	font-weight: 200;
+	margin-top: 40px;
+}

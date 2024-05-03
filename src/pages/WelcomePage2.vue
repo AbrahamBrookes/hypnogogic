@@ -28,8 +28,8 @@ function clickStart() {
 				style="height: 80vh"
 			>
 				<IonCol size="12" size-md="6" class="ion-padding-horizontal">
-					<img :src="step2imgUrl" alt="Welcome" />
-					<p>Practitioners can utilize the hypnogogic state to achieve deep suggestability, lucid dreams and out of body experiences</p>
+					<img :src="step2imgUrl" alt="Welcome" style="margin-top: 40px;" />
+					<h5>Practitioners can utilize the hypnogogic state to achieve deep suggestability, lucid dreams and out of body experiences</h5>
 				</IonCol>
 			</IonRow>
 		</IonGrid>

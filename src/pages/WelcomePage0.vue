@@ -23,9 +23,9 @@ function next() {
 				style="height: 80vh"
 			>
 				<IonCol size="12" size-md="6" class="ion-padding-horizontal">
-					<img :src="step0imgUrl" alt="Welcome" />
-					<strong class="capitalize">Welcome to Hypnogogic</strong>
-					<p>The hypnogogic state is a state of consciousness between awake and asleep</p>
+					<img :src="step0imgUrl" alt="Welcome" style="margin-top: 40px;" />
+					<H1 class="capitalize">Welcome to Hypnogogic</H1>
+					<h5>The hypnogogic state is a state of consciousness between awake and asleep</h5>
 				</IonCol>
 			</IonRow>
 		</IonGrid>

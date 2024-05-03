@@ -24,6 +24,6 @@ const props = defineProps<{
 		v-if="showBatteryOptmizationDialogue"
 		@click="closeBatteryOptimizationDialogue"
 	>
-		<p>Android devices aggressively batch notifications to optimize battery life. You will need to go into your device settings and turn off battery optimization for Hypnogogic in order to get accurate alert timings</p>
+		<p><b>Android devices aggressively batch notifications to optimize battery life. You will need to go into your device settings and turn off battery optimization for Hypnogogic in order to get accurate alert timings</b></p>
 	</Info>	
 </template>

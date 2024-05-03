@@ -23,8 +23,8 @@ function next() {
 				style="height: 80vh"
 			>
 				<IonCol size="12" size-md="6" class="ion-padding-horizontal">
-					<img :src="step1imgUrl" alt="Welcome" />
-					<p>This app uses timed alerts to wake you from sleep at certain intervals, keeping your mind just above sleep for extended periods</p>
+					<img :src="step1imgUrl" alt="Welcome" style="margin-top: 40px;" />
+					<h5>This app uses timed alerts to wake you from sleep at certain intervals, keeping your mind just above sleep for extended periods</h5>
 				</IonCol>
 			</IonRow>
 		</IonGrid>
